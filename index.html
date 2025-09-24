@@ -16,6 +16,86 @@
     <!-- Import SheetJS for Excel Export -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <style>
+        /* Animasi Latar Belakang Gradien */
+        .animated-gradient-bg {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: animate-gradient 15s ease infinite;
+            position: relative;
+            overflow: hidden; /* Menjaga agar elemen animasi tetap di dalam container */
+        }
+
+        @keyframes animate-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Animasi Bentuk Melayang di Latar Belakang */
+        #login-page::before,
+        #login-page::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: 0;
+            animation: float 20s infinite alternate;
+            filter: blur(40px);
+        }
+
+        #login-page::before {
+            width: 300px;
+            height: 300px;
+            background: #a3bffa;
+            top: 10%;
+            left: 15%;
+        }
+
+        #login-page::after {
+            width: 200px;
+            height: 200px;
+            background: #d5aaff;
+            bottom: 15%;
+            right: 20%;
+            animation-duration: 25s;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            100% { transform: translateY(-50px) translateX(20px) rotate(20deg); }
+        }
+
+        /* Memastikan kartu login berada di atas animasi */
+        #login-page .w-full.max-w-md {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Efek visual saat input field di-fokus */
+        input[type="text"]:focus, input[type="password"]:focus {
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4);
+            border-color: #818cf8;
+        }
+
+        /* Efek visual saat tombol di-hover */
+        .btn-hover-effect {
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+
+        .btn-hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Styling untuk Active Sidebar Link */
+        .lecturer-sidebar-link.active {
+            background-color: #eef2ff; /* indigo-50 */
+            color: #4f46e5; /* indigo-700 */
+            font-weight: 600;
+        }
+
+        /* Styling yang sudah ada */
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
@@ -52,7 +132,6 @@
             z-index: 40;
         }
         .modal { z-index: 50; }
-        /* Custom Toggle Switch */
         .toggle-checkbox:checked {
             right: 0;
             border-color: #68D391;
@@ -60,7 +139,6 @@
         .toggle-checkbox:checked + .toggle-label {
             background-color: #68D391;
         }
-        /* Quill Editor Styling */
         #editor-container {
             height: 250px;
         }
@@ -79,7 +157,7 @@
 <body class="min-h-screen bg-gray-100">
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Login Page -->
-        <div id="login-page" class="flex flex-col items-center justify-center min-h-screen gradient-bg p-4">
+        <div id="login-page" class="flex flex-col items-center justify-center min-h-screen animated-gradient-bg p-4">
             <div class="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden" data-aos="fade-up">
                 <div class="px-6 py-8">
                     <div class="flex justify-center mb-8">
@@ -88,19 +166,19 @@
                         </div>
                     </div>
                     <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">English Learning Platform</h2>
-                    <p class="text-center text-gray-600 mb-8">S1 Transportation Program</p>
+                    <p class="text-center text-gray-600 mb-8">AMNI Maritime University</p>
                     
                     <form id="login-form" class="space-y-6">
                         <div>
                             <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username (Student ID)</label>
-                            <input type="text" id="username" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="text" id="username" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                         </div>
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                            <input type="password" id="password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="password" id="password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                         </div>
                         <div>
-                            <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-hover-effect">
                                 Sign In
                             </button>
                         </div>
@@ -112,25 +190,25 @@
                     <form id="register-form" class="space-y-6 hidden">
                          <div>
                             <label for="reg-nrp" class="block text-sm font-medium text-gray-700 mb-1">NRP (Student ID)</label>
-                            <input type="text" id="reg-nrp" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="text" id="reg-nrp" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                         </div>
                         <div>
                             <label for="reg-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                            <input type="text" id="reg-name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="text" id="reg-name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                         </div>
                         <div>
                             <label for="reg-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                            <input type="password" id="reg-password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="password" id="reg-password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                         </div>
                         <div>
                             <label for="reg-confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                            <input type="password" id="reg-confirm-password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="password" id="reg-confirm-password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                         </div>
                         <div class="flex space-x-4">
                             <button type="button" id="back-to-login" class="w-1/2 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                                 Back
                             </button>
-                            <button type="submit" class="w-1/2 gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="submit" class="w-1/2 gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-hover-effect">
                                 Register
                             </button>
                         </div>
@@ -168,122 +246,126 @@
 
 
         <!-- Lecturer Dashboard -->
-        <div id="lecturer-dashboard" class="hidden min-h-screen">
-            <nav class="bg-white shadow-sm sticky top-0 z-10">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <div class="flex-shrink-0 flex items-center">
-                                <i data-feather="briefcase" class="h-8 w-8 text-indigo-600"></i>
-                                <span class="ml-2 text-xl font-semibold text-gray-900">Lecturer Dashboard</span>
-                            </div>
-                            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                                <a href="#" class="lecturer-tab-link border-indigo-500 text-gray-900" data-content="lecturer-modules-content">Modules</a>
-                                <a href="#" class="lecturer-tab-link border-transparent text-gray-500" data-content="lecturer-students-content">Students</a>
-                                <a href="#" class="lecturer-tab-link border-transparent text-gray-500" data-content="lecturer-attendance-content">Attendance</a>
-                                <a href="#" class="lecturer-tab-link border-transparent text-gray-500" data-content="lecturer-submissions-content">Submissions</a>
-                                <a href="#" class="lecturer-tab-link border-transparent text-gray-500" data-content="lecturer-scores-content">Scores</a>
-                            </div>
-                        </div>
-                        <div class="hidden sm:ml-6 sm:flex sm:items-center">
-                            <button id="lecturer-logout" class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                <i data-feather="log-out" class="h-6 w-6"></i>
-                            </button>
+        <div id="lecturer-dashboard" class="hidden flex min-h-screen bg-slate-50">
+            <!-- Sidebar -->
+            <aside class="w-64 bg-white shadow-lg flex flex-col flex-shrink-0">
+                <div class="p-6 border-b flex items-center justify-center">
+                    <i data-feather="briefcase" class="h-8 w-8 text-indigo-600"></i>
+                    <span class="ml-3 text-xl font-semibold text-gray-800">Lecturer Panel</span>
+                </div>
+                <nav class="flex-grow p-4 space-y-2">
+                    <a href="#" class="lecturer-sidebar-link active flex items-center px-4 py-2.5 text-sm font-medium rounded-lg" data-content="lecturer-modules-content">
+                        <i data-feather="grid" class="w-5 h-5 mr-3"></i> Modules
+                    </a>
+                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-students-content">
+                        <i data-feather="users" class="w-5 h-5 mr-3"></i> Students
+                    </a>
+                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-attendance-content">
+                        <i data-feather="user-check" class="w-5 h-5 mr-3"></i> Attendance
+                    </a>
+                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-submissions-content">
+                        <i data-feather="inbox" class="w-5 h-5 mr-3"></i> Submissions
+                    </a>
+                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-scores-content">
+                        <i data-feather="award" class="w-5 h-5 mr-3"></i> Scores
+                    </a>
+                </nav>
+                <div class="p-4 mt-auto border-t">
+                     <button id="lecturer-logout" class="w-full flex items-center justify-center bg-slate-100 hover:bg-red-100 text-slate-700 hover:text-red-700 py-2.5 px-4 rounded-lg transition-all">
+                        <i data-feather="log-out" class="h-5 w-5 mr-2"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="flex-grow p-8 overflow-y-auto">
+                 <div id="lecturer-modules-content" class="lecturer-tab-content">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Module Management</h1>
+                    <div id="lecturer-modules-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <!-- Lecturer module cards will be rendered here -->
+                    </div>
+                </div>
+                <div id="lecturer-students-content" class="lecturer-tab-content hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Registered Students</h1>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="students-table-body"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </nav>
-            <main class="flex-grow py-10">
-                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div id="lecturer-modules-content" class="lecturer-tab-content px-4 py-6 sm:px-0">
-                         <div class="border-2 border-dashed border-gray-200 rounded-lg p-6">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-6">Module Management & Visibility</h2>
-                            <div id="lecturer-modules-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <!-- Lecturer module cards will be rendered here -->
-                            </div>
+                <div id="lecturer-attendance-content" class="lecturer-tab-content hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-gray-800">Student Attendance</h1>
+                        <div>
+                            <label for="attendance-meeting-select" class="text-sm font-medium text-gray-700 mr-2">Select Meeting:</label>
+                            <select id="attendance-meeting-select" class="rounded-md border-gray-300 shadow-sm"></select>
                         </div>
                     </div>
-                    <div id="lecturer-students-content" class="lecturer-tab-content hidden px-4 py-6 sm:px-0">
-                        <div class="border-2 border-dashed border-gray-200 rounded-lg p-6">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-6">Registered Students</h2>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200" id="students-table-body"></tbody>
-                                </table>
-                            </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="attendance-table-body"></tbody>
+                            </table>
                         </div>
                     </div>
-                    <div id="lecturer-attendance-content" class="lecturer-tab-content hidden px-4 py-6 sm:px-0">
-                        <div class="border-2 border-dashed border-gray-200 rounded-lg p-6">
-                            <div class="flex justify-between items-center mb-6">
-                                <h2 class="text-2xl font-bold text-gray-800">Student Attendance</h2>
-                                <div>
-                                    <label for="attendance-meeting-select" class="text-sm font-medium text-gray-700 mr-2">Select Meeting:</label>
-                                    <select id="attendance-meeting-select" class="rounded-md"></select>
-                                </div>
-                            </div>
-                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200" id="attendance-table-body"></tbody>
-                                </table>
-                            </div>
+                </div>
+                 <div id="lecturer-submissions-content" class="lecturer-tab-content hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-gray-800">Assignment Submissions</h1>
+                        <div>
+                            <label for="submission-meeting-select" class="text-sm font-medium text-gray-700 mr-2">Select Meeting:</label>
+                            <select id="submission-meeting-select" class="rounded-md border-gray-300 shadow-sm"></select>
                         </div>
                     </div>
-                     <div id="lecturer-submissions-content" class="lecturer-tab-content hidden px-4 py-6 sm:px-0">
-                        <div class="border-2 border-dashed border-gray-200 rounded-lg p-6">
-                            <div class="flex justify-between items-center mb-6">
-                                <h2 class="text-2xl font-bold text-gray-800">Assignment Submissions</h2>
-                                <div>
-                                    <label for="submission-meeting-select" class="text-sm font-medium text-gray-700 mr-2">Select Meeting:</label>
-                                    <select id="submission-meeting-select" class="rounded-md"></select>
-                                </div>
-                            </div>
-                             <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200" id="submission-table-body"></tbody>
-                                </table>
-                            </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="submission-table-body"></tbody>
+                            </table>
                         </div>
                     </div>
-                    <div id="lecturer-scores-content" class="lecturer-tab-content hidden px-4 py-6 sm:px-0">
-                        <div class="border-2 border-dashed border-gray-200 rounded-lg p-6">
-                            <div class="flex justify-between items-center mb-6">
-                                <h2 class="text-2xl font-bold text-gray-800">Student Quiz Scores</h2>
-                                <button id="export-scores-btn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-all flex items-center">
-                                    <i data-feather="download" class="w-4 h-4 mr-2"></i> Export to Excel
-                                </button>
-                            </div>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50" id="scores-table-head">
-                                        <!-- Header will be dynamically generated -->
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200" id="scores-table-body">
-                                        <!-- Scores will be dynamically inserted here -->
-                                    </tbody>
-                                </table>
-                            </div>
+                </div>
+                <div id="lecturer-scores-content" class="lecturer-tab-content hidden">
+                     <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-gray-800">Student Scores</h1>
+                        <button id="export-scores-btn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-all flex items-center shadow-sm">
+                            <i data-feather="download" class="w-4 h-4 mr-2"></i> Export to Excel
+                        </button>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50" id="scores-table-head">
+                                    <!-- Header will be dynamically generated -->
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="scores-table-body">
+                                    <!-- Scores will be dynamically inserted here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -505,6 +587,8 @@
             if (show && user && user.role === 'lecturer') {
                 lecturerDashboard.classList.remove('hidden');
                 await renderLecturerModules();
+                 // Make sure icons are rendered on initial load
+                feather.replace();
             } else {
                 lecturerDashboard.classList.add('hidden');
             }
@@ -581,19 +665,24 @@
         studentLogout.addEventListener('click', logout);
         lecturerLogout.addEventListener('click', logout);
 
-        document.querySelectorAll('.lecturer-tab-link').forEach(tab => {
+        document.querySelectorAll('.lecturer-sidebar-link').forEach(tab => {
             tab.addEventListener('click', async (e) => {
                 e.preventDefault();
-                document.querySelectorAll('.lecturer-tab-link').forEach(t => {
-                    t.classList.remove('border-indigo-500', 'text-gray-900');
-                    t.classList.add('border-transparent', 'text-gray-500');
+                
+                // Update active state for sidebar links
+                document.querySelectorAll('.lecturer-sidebar-link').forEach(t => {
+                    t.classList.remove('active');
+                    t.classList.add('text-gray-600', 'hover:bg-gray-100');
                 });
-                document.querySelectorAll('.lecturer-tab-content').forEach(c => c.classList.add('hidden'));
+                e.currentTarget.classList.add('active');
+                e.currentTarget.classList.remove('text-gray-600', 'hover:bg-gray-100');
 
-                e.target.classList.add('border-indigo-500', 'text-gray-900');
-                const contentId = e.target.dataset.content;
+                // Hide all content tabs and show the selected one
+                document.querySelectorAll('.lecturer-tab-content').forEach(c => c.classList.add('hidden'));
+                const contentId = e.currentTarget.dataset.content;
                 document.getElementById(contentId).classList.remove('hidden');
 
+                // Load content for the selected tab
                 if (contentId === 'lecturer-students-content') {
                     await renderLecturerStudents();
                 } else if (contentId === 'lecturer-scores-content') {
@@ -605,6 +694,8 @@
                 } else if (contentId === 'lecturer-submissions-content') {
                     await renderLecturerSubmissions();
                 }
+                 // Ensure icons are re-rendered if content changes
+                feather.replace();
             });
         });
         
@@ -1270,6 +1361,7 @@
         
         async function renderLecturerModules() {
             const container = document.getElementById('lecturer-modules-list');
+            if (!container) return; // Guard clause
             container.innerHTML = '<div>Loading modules...</div>';
 
             const [meetingsRes, materialsRes, quizzesRes] = await Promise.all([
@@ -1290,7 +1382,7 @@
                 const quiz = quizzes.find(q => q.meeting == meetingNumber);
 
                 const card = document.createElement('div');
-                card.className = 'bg-white p-4 rounded-lg shadow-md flex flex-col';
+                card.className = 'bg-white p-4 rounded-lg shadow-md flex flex-col transition-all hover:shadow-lg hover:-translate-y-1';
                 
                 let cardHTML = `
                     <div class="flex-grow">
