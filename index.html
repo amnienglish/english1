@@ -16,21 +16,14 @@
     <!-- Import SheetJS for Excel Export -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <style>
-        /* Animasi Latar Belakang Gradien */
-        .animated-gradient-bg {
-            background: linear-gradient(-45deg, #667eea, #764ba2, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: animate-gradient 15s ease infinite;
+        #login-page {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://blogger.googleusercontent.com/img/a/AVvXsEjv_fAqvn09BccXUdb07YFvx8n5tcm6P7RSF6HSTpV4LjfgZ4srpEU90FYYiRTfxBf7TCzqNsHs0uZdGVrYHutDIvxW_-VbYbfXWh2ndE_7K-y4eE01M5XvEf0tDL1tAHMnQWDujEwe6y5hsbgLdGfpqHHNeHuv0PCCtHNta549Dcnw1PxFzrQkkg3lP0xX');
+            background-size: cover;
+            background-position: center;
             position: relative;
-            overflow: hidden; /* Menjaga agar elemen animasi tetap di dalam container */
+            overflow: hidden;
         }
 
-        @keyframes animate-gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
         /* Animasi Bentuk Melayang di Latar Belakang */
         #login-page::before,
         #login-page::after {
@@ -66,16 +59,34 @@
             100% { transform: translateY(-50px) translateX(20px) rotate(20deg); }
         }
 
-        /* Memastikan kartu login berada di atas animasi */
-        #login-page .w-full.max-w-md {
+        /* Kotak Login Transparan (Glassmorphism) */
+        #login-page .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
             z-index: 1;
         }
 
-        /* Efek visual saat input field di-fokus */
-        input[type="text"]:focus, input[type="password"]:focus {
+        /* Input field transparan */
+        #login-page input[type="text"],
+        #login-page input[type="password"] {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        #login-page input[type="text"]::placeholder,
+        #login-page input[type="password"]::placeholder {
+          color: rgba(255, 255, 255, 0.6);
+          opacity: 1;
+        }
+
+        #login-page input[type="text"]:focus,
+        #login-page input[type="password"]:focus {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-color: #a3bffa;
             box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4);
-            border-color: #818cf8;
         }
 
         /* Efek visual saat tombol di-hover */
@@ -165,25 +176,25 @@
 <body class="min-h-screen bg-gray-100">
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Login Page -->
-        <div id="login-page" class="flex flex-col items-center justify-center min-h-screen animated-gradient-bg p-4">
-            <div class="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden" data-aos="fade-up">
+        <div id="login-page" class="flex flex-col items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-md glass-card rounded-lg shadow-xl overflow-hidden" data-aos="fade-up">
                 <div class="px-6 py-8">
                     <div class="flex justify-center mb-8">
                         <div class="bg-indigo-100 p-4 rounded-full">
                             <i data-feather="book" class="text-indigo-600 w-10 h-10"></i>
                         </div>
                     </div>
-                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">English Learning Platform</h2>
-                    <p class="text-center text-gray-600 mb-8">AMNI Maritime University</p>
+                    <h2 class="text-3xl font-bold text-center text-white mb-2">English Learning Platform</h2>
+                    <p class="text-center text-gray-200 mb-8">AMNI Maritime University</p>
                     
                     <form id="login-form" class="space-y-6">
                         <div>
-                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username (Student ID)</label>
-                            <input type="text" id="username" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                            <label for="username" class="block text-sm font-medium text-gray-200 mb-1">Username (Student ID)</label>
+                            <input type="text" id="username" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
                         </div>
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                            <input type="password" id="password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                            <label for="password" class="block text-sm font-medium text-gray-200 mb-1">Password</label>
+                            <input type="password" id="password" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
                         </div>
                         <div>
                             <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-hover-effect">
@@ -191,26 +202,26 @@
                             </button>
                         </div>
                         <div class="text-center">
-                            <p class="text-sm text-gray-600">Don't have an account? <button type="button" id="show-register" class="text-indigo-600 hover:text-indigo-800 font-medium">Register here</button></p>
+                            <p class="text-sm text-gray-300">Don't have an account? <button type="button" id="show-register" class="text-indigo-300 hover:text-indigo-100 font-medium">Register here</button></p>
                         </div>
                     </form>
 
                     <form id="register-form" class="space-y-6 hidden">
                          <div>
-                            <label for="reg-nrp" class="block text-sm font-medium text-gray-700 mb-1">NRP (Student ID)</label>
-                            <input type="text" id="reg-nrp" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                            <label for="reg-nrp" class="block text-sm font-medium text-gray-200 mb-1">NRP (Student ID)</label>
+                            <input type="text" id="reg-nrp" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
                         </div>
                         <div>
-                            <label for="reg-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                            <input type="text" id="reg-name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                            <label for="reg-name" class="block text-sm font-medium text-gray-200 mb-1">Full Name</label>
+                            <input type="text" id="reg-name" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
                         </div>
                         <div>
-                            <label for="reg-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                            <input type="password" id="reg-password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                            <label for="reg-password" class="block text-sm font-medium text-gray-200 mb-1">Password</label>
+                            <input type="password" id="reg-password" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
                         </div>
                         <div>
-                            <label for="reg-confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                            <input type="password" id="reg-confirm-password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                            <label for="reg-confirm-password" class="block text-sm font-medium text-gray-200 mb-1">Confirm Password</label>
+                            <input type="password" id="reg-confirm-password" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
                         </div>
                         <div class="flex space-x-4">
                             <button type="button" id="back-to-login" class="w-1/2 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
