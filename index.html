@@ -106,12 +106,19 @@
             font-weight: 600;
         }
         
-        /* Animasi Jam Berkedip */
-        @keyframes blink {
-            50% { opacity: 0.3; }
+        /* Animasi Gradien Teks untuk Jam */
+        @keyframes animate-text-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .clock-colon {
-            animation: blink 1s step-end infinite;
+        
+        .animated-clock-text {
+            background: linear-gradient(-45deg, #a3bffa, #d5aaff, #a3bffa);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: animate-text-gradient 8s ease infinite;
         }
 
         /* Styling yang sudah ada */
@@ -246,12 +253,16 @@
                         <span class="ml-3 text-xl font-semibold">Learning Modules</span>
                     </div>
                     <div id="student-welcome" class="text-sm text-slate-400 mt-4"></div>
-                    <div id="student-clock" class="text-xs text-slate-500 mt-1"></div>
+                    <div id="student-clock" class="text-sm font-mono mt-2 animated-clock-text"></div>
                 </div>
                 <div class="flex-grow p-4 overflow-y-auto">
                     <div id="student-module-list" class="space-y-1"></div>
                 </div>
-                <div class="p-4 border-t border-slate-700">
+                <div class="p-4 border-t border-slate-700 space-y-2">
+                    <button id="change-password-btn" class="w-full flex items-center justify-center bg-slate-700 hover:bg-indigo-500 text-white py-2 px-4 rounded-md transition-all">
+                        <i data-feather="key" class="h-5 w-5 mr-2"></i>
+                        <span>Change Password</span>
+                    </button>
                     <button id="student-logout" class="w-full flex items-center justify-center bg-slate-700 hover:bg-red-600 text-white py-2 px-4 rounded-md transition-all">
                         <i data-feather="log-out" class="h-5 w-5 mr-2"></i>
                         <span>Logout</span>
@@ -273,7 +284,7 @@
                     <i data-feather="briefcase" class="h-8 w-8 text-indigo-600"></i>
                     <span class="ml-3 text-xl font-semibold text-gray-800">Lecturer Panel</span>
                 </div>
-                <div id="lecturer-clock" class="text-xs text-slate-500 text-center px-4 pb-4 border-b"></div>
+                <div id="lecturer-clock" class="text-sm font-medium text-center px-4 py-3 border-b animated-clock-text"></div>
                 <nav class="flex-grow p-4 space-y-2">
                     <a href="#" class="lecturer-sidebar-link active flex items-center px-4 py-2.5 text-sm font-medium rounded-lg" data-content="lecturer-modules-content">
                         <i data-feather="grid" class="w-5 h-5 mr-3"></i> Modules
@@ -487,6 +498,37 @@
                 </div>
             </div>
         </div>
+
+        <!-- Change Password Modal (Student) -->
+        <div id="change-password-modal" class="modal fixed inset-0 overflow-y-auto hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="modal-backdrop"></div>
+                <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-md sm:w-full z-50">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Change Your Password</h3>
+                        <form id="change-password-form" class="mt-4 space-y-4">
+                            <div>
+                                <label for="old-password" class="block text-sm font-medium text-gray-700">Old Password</label>
+                                <input type="password" id="old-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                             <div>
+                                <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                                <input type="password" id="new-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                             <div>
+                                <label for="confirm-new-password" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                                <input type="password" id="confirm-new-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse items-center">
+                        <button type="button" id="save-new-password" class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 sm:ml-3">Save Changes</button>
+                        <button type="button" id="cancel-change-password" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     
     <div id="notification"></div>
@@ -559,6 +601,13 @@
         const closeQuizTakerBtn = document.getElementById('close-quiz-taker');
         const submitQuizAnswersBtn = document.getElementById('submit-quiz-answers');
         
+        // Change Password Elements
+        const changePasswordBtn = document.getElementById('change-password-btn');
+        const changePasswordModal = document.getElementById('change-password-modal');
+        const cancelChangePasswordBtn = document.getElementById('cancel-change-password');
+        const saveNewPasswordBtn = document.getElementById('save-new-password');
+        const changePasswordForm = document.getElementById('change-password-form');
+
         const exportScoresBtn = document.getElementById('export-scores-btn');
         const notification = document.getElementById('notification');
         let notificationTimeout;
@@ -622,8 +671,8 @@
             if (!studentClock && !lecturerClock) return;
 
             const now = new Date();
-            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
             const dayName = days[now.getDay()];
             const date = now.getDate();
@@ -634,7 +683,7 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
 
-            const formattedTime = `${dayName}, ${date} ${monthName} ${year}, ${hours}<span class="clock-colon">:</span>${minutes}<span class="clock-colon">:</span>${seconds} WIB`;
+            const formattedTime = `${dayName}, ${date} ${monthName} ${year}, ${hours}:${minutes}:${seconds} WIB`;
 
             if (studentClock && !studentDashboard.classList.contains('hidden')) {
                 studentClock.innerHTML = formattedTime;
@@ -1712,6 +1761,37 @@
             XLSX.writeFile(workbook, "Student_Scores_Recap.xlsx");
         }
 
+        async function handleChangePassword() {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            const oldPassword = document.getElementById('old-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmNewPassword = document.getElementById('confirm-new-password').value;
+            
+            if (!oldPassword || !newPassword || !confirmNewPassword) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+            if (newPassword !== confirmNewPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            if (user.password !== oldPassword) {
+                showNotification('Old password is not correct', 'error');
+                return;
+            }
+
+            const { error } = await db.from('students').update({ password: newPassword }).eq('id', user.id);
+            if (error) {
+                showNotification('Failed to update password: ' + error.message, 'error');
+            } else {
+                showNotification('Password updated successfully!');
+                // Update password in session storage as well
+                user.password = newPassword;
+                sessionStorage.setItem('user', JSON.stringify(user));
+                changePasswordModal.classList.add('hidden');
+                changePasswordForm.reset();
+            }
+        }
 
         // --- Initial App Load ---
         function checkSession() {
@@ -1754,6 +1834,22 @@
                exportBtn.addEventListener('click', exportScoresToExcel);
             }
             
+            // Event Listeners for Change Password Modal
+            if(changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', () => {
+                    changePasswordModal.classList.remove('hidden');
+                    changePasswordForm.reset();
+                });
+            }
+            if(cancelChangePasswordBtn) {
+                cancelChangePasswordBtn.addEventListener('click', () => {
+                    changePasswordModal.classList.add('hidden');
+                });
+            }
+            if(saveNewPasswordBtn) {
+                saveNewPasswordBtn.addEventListener('click', handleChangePassword);
+            }
+
             // Start the clock
             updateClock();
             setInterval(updateClock, 1000);
