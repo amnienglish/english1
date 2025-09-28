@@ -3,1860 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Learning Platform</title>
+    <title>404 - Under Maintenance</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <!-- Import Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Import Quill JS and CSS -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <!-- Import SheetJS for Excel Export -->
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        #login-page {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://blogger.googleusercontent.com/img/a/AVvXsEjv_fAqvn09BccXUdb07YFvx8n5tcm6P7RSF6HSTpV4LjfgZ4srpEU90FYYiRTfxBf7TCzqNsHs0uZdGVrYHutDIvxW_-VbYbfXWh2ndE_7K-y4eE01M5XvEf0tDL1tAHMnQWDujEwe6y5hsbgLdGfpqHHNeHuv0PCCtHNta549Dcnw1PxFzrQkkg3lP0xX');
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Mengganti URL background dan menambahkan fallback color */
+            background: #0F172A url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
             background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
+            height: 100vh;
+            overflow: hidden; /* Mencegah scroll karena animasi di luar layar */
         }
 
-        /* Animasi Bentuk Melayang di Latar Belakang */
-        #login-page::before,
-        #login-page::after {
+        /* --- Firefly Animation --- */
+        .firefly {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: 0.4vw;
+            height: 0.4vw;
+            margin: -0.2vw 0 0 9.8vw;
+            animation: ease 200s alternate infinite;
+            pointer-events: none;
+            z-index: 2; /* Di atas background, di bawah ikon lain */
+        }
+
+        .firefly::before,
+        .firefly::after {
             content: '';
             position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            opacity: 0.15;
-            z-index: 0;
-            animation: float 20s infinite alternate;
-            filter: blur(40px);
+            transform-origin: -10vw;
         }
 
-        #login-page::before {
-            width: 300px;
-            height: 300px;
-            background: #a3bffa;
-            top: 10%;
-            left: 15%;
+        .firefly::before {
+            background: black;
+            opacity: 0.4;
+            animation: drift ease alternate infinite;
         }
 
-        #login-page::after {
-            width: 200px;
-            height: 200px;
-            background: #d5aaff;
-            bottom: 15%;
-            right: 20%;
-            animation-duration: 25s;
-            animation-delay: -5s;
+        .firefly::after {
+            background: white;
+            opacity: 0;
+            box-shadow: 0 0 0vw 0vw yellow;
+            animation: drift ease alternate infinite, flash ease infinite;
         }
+
+        @keyframes drift {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes flash {
+            0%, 30%, 100% {
+                opacity: 0;
+                box-shadow: 0 0 0vw 0vw yellow;
+            }
+            5% {
+                opacity: 1;
+                box-shadow: 0 0 2vw 0.4vw yellow;
+            }
+        }
+        
+        /* --- Generated Firefly Animations --- */
+        .firefly:nth-child(1) { animation-name: move1; }
+        .firefly:nth-child(1)::before { animation-duration: 12s; }
+        .firefly:nth-child(1)::after { animation-duration: 12s, 5324ms; animation-delay: 0ms, 6789ms; }
+        @keyframes move1 { 0% { transform: translateX(1vw) translateY(44vh) scale(0.5); } 10% { transform: translateX(13vw) translateY(3vh) scale(0.3); } 20% { transform: translateX(2vw) translateY(85vh) scale(0.8); } 30% { transform: translateX(29vw) translateY(8vh) scale(0.3); } 40% { transform: translateX(-4vw) translateY(82vh) scale(0.4); } 50% { transform: translateX(11vw) translateY(24vh) scale(0.3); } 60% { transform: translateX(-4vw) translateY(7vh) scale(0.6); } 70% { transform: translateX(33vw) translateY(12vh) scale(0.5); } 80% { transform: translateX(47vw) translateY(51vh) scale(0.4); } 90% { transform: translateX(39vw) translateY(4vh) scale(0.8); } 100% { transform: translateX(1vw) translateY(41vh) scale(0.5); } }
+
+        .firefly:nth-child(2) { animation-name: move2; }
+        .firefly:nth-child(2)::before { animation-duration: 15s; }
+        .firefly:nth-child(2)::after { animation-duration: 15s, 7203ms; animation-delay: 0ms, 3456ms; }
+        @keyframes move2 { 0% { transform: translateX(-4vw) translateY(13vh) scale(0.8); } 10% { transform: translateX(17vw) translateY(81vh) scale(0.5); } 20% { transform: translateX(43vw) translateY(82vh) scale(0.8); } 30% { transform: translateX(1vw) translateY(1vh) scale(0.4); } 40% { transform: translateX(23vw) translateY(80vh) scale(0.6); } 50% { transform: translateX(40vw) translateY(79vh) scale(0.8); } 60% { transform: translateX(4vw) translateY(69vh) scale(0.6); } 70% { transform: translateX(47vw) translateY(47vh) scale(0.8); } 80% { transform: translateX(32vw) translateY(68vh) scale(0.3); } 90% { transform: translateX(5vw) translateY(65vh) scale(0.8); } 100% { transform: translateX(27vw) translateY(5vh) scale(0.4); } }
+
+        .firefly:nth-child(3) { animation-name: move3; }
+        .firefly:nth-child(3)::before { animation-duration: 10s; }
+        .firefly:nth-child(3)::after { animation-duration: 10s, 8911ms; animation-delay: 0ms, 1234ms; }
+        @keyframes move3 { 0% { transform: translateX(44vw) translateY(28vh) scale(0.6); } 10% { transform: translateX(3vw) translateY(75vh) scale(0.8); } 20% { transform: translateX(3vw) translateY(81vh) scale(0.3); } 30% { transform: translateX(40vw) translateY(53vh) scale(0.8); } 40% { transform: translateX(45vw) translateY(83vh) scale(0.3); } 50% { transform: translateX(24vw) translateY(1vh) scale(0.4); } 60% { transform: translateX(38vw) translateY(41vh) scale(0.3); } 70% { transform: translateX(29vw) translateY(3vh) scale(0.4); } 80% { transform: translateX(13vw) translateY(8vh) scale(0.8); } 90% { transform: translateX(1vw) translateY(20vh) scale(0.4); } 100% { transform: translateX(18vw) translateY(35vh) scale(0.6); } }
+
+        .firefly:nth-child(4) { animation-name: move4; }
+        .firefly:nth-child(4)::before { animation-duration: 17s; }
+        .firefly:nth-child(4)::after { animation-duration: 17s, 5876ms; animation-delay: 0ms, 4567ms; }
+        @keyframes move4 { 0% { transform: translateX(-3vw) translateY(4vh) scale(0.5); } 10% { transform: translateX(44vw) translateY(5vh) scale(0.8); } 20% { transform: translateX(25vw) translateY(80vh) scale(0.3); } 30% { transform: translateX(16vw) translateY(78vh) scale(0.5); } 40% { transform: translateX(23vw) translateY(38vh) scale(0.6); } 50% { transform: translateX(39vw) translateY(52vh) scale(0.3); } 60% { transform: translateX(4vw) translateY(28vh) scale(0.8); } 70% { transform: translateX(45vw) translateY(26vh) scale(0.4); } 80% { transform: translateX(23vw) translateY(36vh) scale(0.6); } 90% { transform: translateX(35vw) translateY(2vh) scale(0.8); } 100% { transform: translateX(-2vw) translateY(17vh) scale(0.5); } }
+
+        .firefly:nth-child(5) { animation-name: move5; }
+        .firefly:nth-child(5)::before { animation-duration: 9s; }
+        .firefly:nth-child(5)::after { animation-duration: 9s, 9872ms; animation-delay: 0ms, 2345ms; }
+        @keyframes move5 { 0% { transform: translateX(31vw) translateY(84vh) scale(0.8); } 10% { transform: translateX(10vw) translateY(66vh) scale(0.4); } 20% { transform: translateX(1vw) translateY(5vh) scale(0.6); } 30% { transform: translateX(25vw) translateY(15vh) scale(0.3); } 40% { transform: translateX(40vw) translateY(6vh) scale(0.8); } 50% { transform: translateX(15vw) translateY(41vh) scale(0.4); } 60% { transform: translateX(36vw) translateY(79vh) scale(0.6); } 70% { transform: translateX(4vw) translateY(12vh) scale(0.3); } 80% { transform: translateX(19vw) translateY(30vh) scale(0.8); } 90% { transform: translateX(49vw) translateY(3vh) scale(0.4); } 100% { transform: translateX(2vw) translateY(50vh) scale(0.8); } }
+
+        .firefly:nth-child(6) { animation-name: move6; }
+        .firefly:nth-child(6)::before { animation-duration: 13s; }
+        .firefly:nth-child(6)::after { animation-duration: 13s, 5432ms; animation-delay: 0ms, 7890ms; }
+        @keyframes move6 { 0% { transform: translateX(2vw) translateY(50vh) scale(0.3); } 10% { transform: translateX(15vw) translateY(2vh) scale(0.5); } 20% { transform: translateX(30vw) translateY(60vh) scale(0.8); } 30% { transform: translateX(45vw) translateY(10vh) scale(0.4); } 40% { transform: translateX(5vw) translateY(90vh) scale(0.6); } 50% { transform: translateX(20vw) translateY(5vh) scale(0.3); } 60% { transform: translateX(35vw) translateY(70vh) scale(0.7); } 70% { transform: translateX(50vw) translateY(20vh) scale(0.4); } 80% { transform: translateX(10vw) translateY(80vh) scale(0.5); } 90% { transform: translateX(25vw) translateY(15vh) scale(0.8); } 100% { transform: translateX(40vw) translateY(50vh) scale(0.3); } }
+
+        .firefly:nth-child(7) { animation-name: move7; }
+        .firefly:nth-child(7)::before { animation-duration: 16s; }
+        .firefly:nth-child(7)::after { animation-duration: 16s, 6789ms; animation-delay: 0ms, 1029ms; }
+        @keyframes move7 { 0% { transform: translateX(48vw) translateY(40vh) scale(0.8); } 10% { transform: translateX(5vw) translateY(10vh) scale(0.4); } 20% { transform: translateX(33vw) translateY(70vh) scale(0.6); } 30% { transform: translateX(12vw) translateY(5vh) scale(0.3); } 40% { transform: translateX(40vw) translateY(90vh) scale(0.7); } 50% { transform: translateX(8vw) translateY(25vh) scale(0.4); } 60% { transform: translateX(25vw) translateY(50vh) scale(0.8); } 70% { transform: translateX(45vw) translateY(5vh) scale(0.3); } 80% { transform: translateX(15vw) translateY(85vh) scale(0.5); } 90% { transform: translateX(30vw) translateY(30vh) scale(0.6); } 100% { transform: translateX(50vw) translateY(60vh) scale(0.8); } }
+        
+        .firefly:nth-child(8) { animation-name: move8; }
+        .firefly:nth-child(8)::before { animation-duration: 8s; }
+        .firefly:nth-child(8)::after { animation-duration: 8s, 10500ms; animation-delay: 0ms, 4321ms; }
+        @keyframes move8 { 0% { transform: translateX(-5vw) translateY(25vh) scale(0.4); } 10% { transform: translateX(20vw) translateY(85vh) scale(0.7); } 20% { transform: translateX(40vw) translateY(10vh) scale(0.3); } 30% { transform: translateX(10vw) translateY(95vh) scale(0.8); } 40% { transform: translateX(30vw) translateY(5vh) scale(0.5); } 50% { transform: translateX(0vw) translateY(50vh) scale(0.4); } 60% { transform: translateX(25vw) translateY(75vh) scale(0.6); } 70% { transform: translateX(45vw) translateY(25vh) scale(0.3); } 80% { transform: translateX(5vw) translateY(90vh) scale(0.7); } 90% { transform: translateX(35vw) translateY(15vh) scale(0.5); } 100% { transform: translateX(-3vw) translateY(45vh) scale(0.4); } }
+
+        .firefly:nth-child(9) { animation-name: move9; }
+        .firefly:nth-child(9)::before { animation-duration: 14s; }
+        .firefly:nth-child(9)::after { animation-duration: 14s, 7654ms; animation-delay: 0ms, 5678ms; }
+        @keyframes move9 { 0% { transform: translateX(30vw) translateY(30vh) scale(0.6); } 10% { transform: translateX(0vw) translateY(70vh) scale(0.8); } 20% { transform: translateX(20vw) translateY(5vh) scale(0.4); } 30% { transform: translateX(50vw) translateY(80vh) scale(0.7); } 40% { transform: translateX(10vw) translateY(10vh) scale(0.5); } 50% { transform: translateX(40vw) translateY(50vh) scale(0.6); } 60% { transform: translateX(5vw) translateY(90vh) scale(0.8); } 70% { transform: translateX(25vw) translateY(20vh) scale(0.3); } 80% { transform: translateX(45vw) translateY(60vh) scale(0.7); } 90% { transform: translateX(15vw) translateY(5vh) scale(0.5); } 100% { transform: translateX(35vw) translateY(40vh) scale(0.6); } }
+        
+        .firefly:nth-child(10) { animation-name: move10; }
+        .firefly:nth-child(10)::before { animation-duration: 11s; }
+        .firefly:nth-child(10)::after { animation-duration: 11s, 8765ms; animation-delay: 0ms, 3210ms; }
+        @keyframes move10 { 0% { transform: translateX(10vw) translateY(10vh) scale(0.8); } 10% { transform: translateX(30vw) translateY(80vh) scale(0.4); } 20% { transform: translateX(5vw) translateY(20vh) scale(0.7); } 30% { transform: translateX(40vw) translateY(90vh) scale(0.5); } 40% { transform: translateX(15vw) translateY(5vh) scale(0.6); } 50% { transform: translateX(35vw) translateY(70vh) scale(0.8); } 60% { transform: translateX(0vw) translateY(30vh) scale(0.4); } 70% { translateX(45vw) translateY(60vh) scale(0.7); } 80% { transform: translateX(20vw) translateY(15vh) scale(0.5); } 90% { transform: translateX(50vw) translateY(50vh) scale(0.6); } 100% { transform: translateX(25vw) translateY(25vh) scale(0.8); } }
+
+        .firefly:nth-child(11) { animation-name: move11; }
+        .firefly:nth-child(11)::before { animation-duration: 18s; }
+        .firefly:nth-child(11)::after { animation-duration: 18s, 6543ms; animation-delay: 0ms, 8765ms; }
+        @keyframes move11 { 0% { transform: translateX(40vw) translateY(-10vh) scale(0.5); } 10% { transform: translateX(10vw) translateY(100vh) scale(0.8); } 20% { transform: translateX(30vw) translateY(0vh) scale(0.4); } 30% { transform: translateX(5vw) translateY(80vh) scale(0.7); } 40% { transform: translateX(25vw) translateY(10vh) scale(0.5); } 50% { transform: translateX(50vw) translateY(70vh) scale(0.6); } 60% { transform: translateX(15vw) translateY(20vh) scale(0.8); } 70% { transform: translateX(35vw) translateY(90vh) scale(0.3); } 80% { transform: translateX(0vw) translateY(30vh) scale(0.7); } 90% { transform: translateX(20vw) translateY(60vh) scale(0.5); } 100% { transform: translateX(45vw) translateY(0vh) scale(0.6); } }
+
+        .firefly:nth-child(12) { animation-name: move12; }
+        .firefly:nth-child(12)::before { animation-duration: 7s; }
+        .firefly:nth-child(12)::after { animation-duration: 7s, 10987ms; animation-delay: 0ms, 2109ms; }
+        @keyframes move12 { 0% { transform: translateX(5vw) translateY(95vh) scale(0.6); } 10% { transform: translateX(45vw) translateY(5vh) scale(0.3); } 20% { transform: translateX(15vw) translateY(85vh) scale(0.7); } 30% { transform: translateX(35vw) translateY(15vh) scale(0.5); } 40% { transform: translateX(0vw) translateY(75vh) scale(0.6); } 50% { transform: translateX(50vw) translateY(25vh) scale(0.8); } 60% { transform: translateX(10vw) translateY(65vh) scale(0.4); } 70% { transform: translateX(30vw) translateY(35vh) scale(0.7); } 80% { transform: translateX(20vw) translateY(90vh) scale(0.5); } 90% { transform: translateX(40vw) translateY(10vh) scale(0.6); } 100% { transform: translateX(2vw) translateY(80vh) scale(0.8); } }
+
+        .firefly:nth-child(13) { animation-name: move13; }
+        .firefly:nth-child(13)::before { animation-duration: 15s; }
+        .firefly:nth-child(13)::after { animation-duration: 15s, 5000ms; animation-delay: 0ms, 5000ms; }
+        @keyframes move13 { 0% { transform: translateX(-5vw) translateY(50vh) scale(0.7); } 10% { transform: translateX(25vw) translateY(0vh) scale(0.4); } 20% { transform: translateX(45vw) translateY(100vh) scale(0.8); } 30% { transform: translateX(0vw) translateY(20vh) scale(0.5); } 40% { transform: translateX(35vw) translateY(80vh) scale(0.7); } 50% { transform: translateX(10vw) translateY(30vh) scale(0.6); } 60% { transform: translateX(20vw) translateY(90vh) scale(0.8); } 70% { transform: translateX(40vw) translateY(10vh) scale(0.3); } 80% { transform: translateX(5vw) translateY(60vh) scale(0.7); } 90% { transform: translateX(30vw) translateY(40vh) scale(0.5); } 100% { transform: translateX(-2vw) translateY(70vh) scale(0.6); } }
+
+        .firefly:nth-child(14) { animation-name: move14; }
+        .firefly:nth-child(14)::before { animation-duration: 10s; }
+        .firefly:nth-child(14)::after { animation-duration: 10s, 9500ms; animation-delay: 0ms, 3000ms; }
+        @keyframes move14 { 0% { transform: translateX(50vw) translateY(80vh) scale(0.8); } 10% { transform: translateX(0vw) translateY(10vh) scale(0.5); } 20% { transform: translateX(20vw) translateY(90vh) scale(0.7); } 30% { transform: translateX(10vw) translateY(5vh) scale(0.4); } 40% { transform: translateX(30vw) translateY(70vh) scale(0.6); } 50% { transform: translateX(40vw) translateY(20vh) scale(0.8); } 60% { transform: translateX(15vw) translateY(85vh) scale(0.3); } 70% { transform: translateX(25vw) translateY(30vh) scale(0.7); } 80% { transform: translateX(45vw) translateY(60vh) scale(0.5); } 90% { transform: translateX(5vw) translateY(40vh) scale(0.6); } 100% { transform: translateX(35vw) translateY(95vh) scale(0.8); } }
+
+        .firefly:nth-child(15) { animation-name: move15; }
+        .firefly:nth-child(15)::before { animation-duration: 12s; }
+        .firefly:nth-child(15)::after { animation-duration: 12s, 8000ms; animation-delay: 0ms, 7500ms; }
+        @keyframes move15 { 0% { transform: translateX(15vw) translateY(75vh) scale(0.4); } 10% { transform: translateX(35vw) translateY(5vh) scale(0.7); } 20% { transform: translateX(0vw) translateY(85vh) scale(0.5); } 30% { transform: translateX(25vw) translateY(10vh) scale(0.6); } 40% { transform: translateX(45vw) translateY(95vh) scale(0.8); } 50% { transform: translateX(5vw) translateY(20vh) scale(0.3); } 60% { transform: translateX(20vw) translateY(70vh) scale(0.7); } 70% { transform: translateX(40vw) translateY(30vh) scale(0.5); } 80% { transform: translateX(10vw) translateY(90vh) scale(0.6); } 90% { transform: translateX(30vw) translateY(50vh) scale(0.8); } 100% { transform: translateX(0vw) translateY(60vh) scale(0.4); } }
+
+
+        /* --- Ikon Melayang yang Sudah Ada (disesuaikan) --- */
+        .icon-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 3; /* Di atas bintang tapi di belakang teks */
+        }
+
+        .floating-icon {
+            position: absolute;
+            animation: float 15s ease-in-out infinite;
+            opacity: 0.1; /* Opasitas dikurangi untuk latar gelap */
+            color: #94a3b8; /* slate-400 */
+        }
+        
+        .floating-icon.book { width: 60px; height: 60px; top: 15%; left: 10%; animation-duration: 18s; animation-delay: -5s; }
+        .floating-icon.pencil { width: 50px; height: 50px; top: 30%; right: 8%; animation-duration: 22s; animation-delay: -2s; }
+        .floating-icon.bulb { width: 55px; height: 55px; top: 70%; left: 20%; animation-duration: 16s; animation-delay: -10s; }
+        .floating-icon.abc { width: 70px; height: 70px; top: 80%; right: 15%; animation-duration: 25s; animation-delay: -7s; }
+        .floating-icon.chat { width: 65px; height: 65px; top: 5%; left: 50%; animation-duration: 20s; animation-delay: 0s; }
+        .floating-icon.star { width: 45px; height: 45px; top: 50%; left: 40%; animation-duration: 14s; animation-delay: -12s; }
 
         @keyframes float {
-            0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
-            100% { transform: translateY(-50px) translateX(20px) rotate(20deg); }
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-40px) rotate(15deg); }
+            100% { transform: translateY(0) rotate(0deg); }
         }
 
-        /* Kotak Login Transparan (Glassmorphism) */
-        #login-page .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            z-index: 1;
+        /* --- Animasi untuk Teks --- */
+        .text-anim {
+            animation: text-float 8s ease-in-out infinite;
         }
 
-        /* Input field transparan */
-        #login-page input[type="text"],
-        #login-page input[type="password"] {
-            background-color: rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: white;
-        }
-        #login-page input[type="text"]::placeholder,
-        #login-page input[type="password"]::placeholder {
-          color: rgba(255, 255, 255, 0.6);
-          opacity: 1;
-        }
-
-        #login-page input[type="text"]:focus,
-        #login-page input[type="password"]:focus {
-            background-color: rgba(0, 0, 0, 0.3);
-            border-color: #a3bffa;
-            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4);
-        }
-
-        /* Efek visual saat tombol di-hover */
-        .btn-hover-effect {
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-        }
-
-        .btn-hover-effect:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* Styling untuk Active Sidebar Link */
-        .lecturer-sidebar-link.active {
-            background-color: #eef2ff; /* indigo-50 */
-            color: #4f46e5; /* indigo-700 */
-            font-weight: 600;
-        }
-        
-        /* Animasi Gradien Teks untuk Jam */
-        @keyframes animate-text-gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .animated-clock-text {
-            background: linear-gradient(-45deg, #a3bffa, #d5aaff, #a3bffa);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: animate-text-gradient 8s ease infinite;
-        }
-
-        /* Styling yang sudah ada */
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .transition-all {
-            transition: all 0.3s ease;
-        }
-        #notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            color: white;
-            z-index: 1050;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-        #notification.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        #notification.success { background-color: #10B981; }
-        #notification.error { background-color: #EF4444; }
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(107, 114, 128, 0.75);
-            z-index: 40;
-        }
-        .modal { z-index: 50; }
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: #68D391;
-        }
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: #68D391;
-        }
-        #editor-container {
-            height: 250px;
-        }
-        .ql-editor {
-            font-size: 16px;
-        }
-        .ql-editor.ql-blank::before {
-            color: #a0aec0;
-        }
-        .module-item.active {
-            background-color: #334155; /* slate-700 */
-            color: #FFFFFF;
+        @keyframes text-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
         }
     </style>
 </head>
-<body class="min-h-screen bg-gray-100">
-    <div id="app" class="flex flex-col min-h-screen">
-        <!-- Login Page -->
-        <div id="login-page" class="flex flex-col items-center justify-center min-h-screen p-4">
-            <div class="w-full max-w-md glass-card rounded-lg shadow-xl overflow-hidden" data-aos="fade-up">
-                <div class="px-6 py-8">
-                    <div class="flex justify-center mb-8">
-                        <div class="bg-indigo-100 p-4 rounded-full">
-                            <i data-feather="book" class="text-indigo-600 w-10 h-10"></i>
-                        </div>
-                    </div>
-                    <h2 class="text-3xl font-bold text-center text-white mb-2">English Learning Platform</h2>
-                    <p class="text-center text-gray-200 mb-8">AMNI Maritime University</p>
-                    
-                    <form id="login-form" class="space-y-6">
-                        <div>
-                            <label for="username" class="block text-sm font-medium text-gray-200 mb-1">Username (Student ID)</label>
-                            <input type="text" id="username" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-gray-200 mb-1">Password</label>
-                            <input type="password" id="password" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-hover-effect">
-                                Sign In
-                            </button>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-sm text-gray-300">Don't have an account? <button type="button" id="show-register" class="text-indigo-300 hover:text-indigo-100 font-medium">Register here</button></p>
-                        </div>
-                    </form>
+<body class="flex items-center justify-center min-h-screen text-white">
 
-                    <form id="register-form" class="space-y-6 hidden">
-                         <div>
-                            <label for="reg-nrp" class="block text-sm font-medium text-gray-200 mb-1">NRP (Student ID)</label>
-                            <input type="text" id="reg-nrp" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label for="reg-name" class="block text-sm font-medium text-gray-200 mb-1">Full Name</label>
-                            <input type="text" id="reg-name" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label for="reg-password" class="block text-sm font-medium text-gray-200 mb-1">Password</label>
-                            <input type="password" id="reg-password" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label for="reg-confirm-password" class="block text-sm font-medium text-gray-200 mb-1">Confirm Password</label>
-                            <input type="password" id="reg-confirm-password" required class="w-full px-4 py-2 border rounded-md focus:outline-none transition-all">
-                        </div>
-                        <div class="flex space-x-4">
-                            <button type="button" id="back-to-login" class="w-1/2 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                                Back
-                            </button>
-                            <button type="submit" class="w-1/2 gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 btn-hover-effect">
-                                Register
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <!-- Fireflies -->
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
 
-        <!-- Student Dashboard -->
-        <div id="student-dashboard" class="hidden flex h-screen">
-             <!-- Sidebar -->
-             <div class="w-80 bg-slate-800 text-white flex flex-col flex-shrink-0">
-                <div class="p-6 border-b border-slate-700">
-                    <div class="flex items-center">
-                        <i data-feather="book-open" class="h-8 w-8 text-indigo-400"></i>
-                        <span class="ml-3 text-xl font-semibold">Learning Modules</span>
-                    </div>
-                    <div id="student-welcome" class="text-sm text-slate-400 mt-4"></div>
-                    <div id="student-clock" class="text-sm font-mono mt-2 animated-clock-text"></div>
-                </div>
-                <div class="flex-grow p-4 overflow-y-auto">
-                    <div id="student-module-list" class="space-y-1"></div>
-                </div>
-                <div class="p-4 border-t border-slate-700 space-y-2">
-                    <button id="change-password-btn" class="w-full flex items-center justify-center bg-slate-700 hover:bg-indigo-500 text-white py-2 px-4 rounded-md transition-all">
-                        <i data-feather="key" class="h-5 w-5 mr-2"></i>
-                        <span>Change Password</span>
-                    </button>
-                    <button id="student-logout" class="w-full flex items-center justify-center bg-slate-700 hover:bg-red-600 text-white py-2 px-4 rounded-md transition-all">
-                        <i data-feather="log-out" class="h-5 w-5 mr-2"></i>
-                        <span>Logout</span>
-                    </button>
-                </div>
-            </div>
-            <!-- Main Content -->
-            <div class="flex-grow p-10 overflow-y-auto bg-gray-100">
-                 <div id="student-module-detail" class="bg-white p-8 rounded-lg shadow-md min-h-full"></div>
-            </div>
-        </div>
-
-
-        <!-- Lecturer Dashboard -->
-        <div id="lecturer-dashboard" class="hidden flex min-h-screen bg-slate-50">
-            <!-- Sidebar -->
-            <aside class="w-64 bg-white shadow-lg flex flex-col flex-shrink-0">
-                <div class="p-6 border-b flex items-center justify-center">
-                    <i data-feather="briefcase" class="h-8 w-8 text-indigo-600"></i>
-                    <span class="ml-3 text-xl font-semibold text-gray-800">Lecturer Panel</span>
-                </div>
-                <div id="lecturer-clock" class="text-sm font-medium text-center px-4 py-3 border-b animated-clock-text"></div>
-                <nav class="flex-grow p-4 space-y-2">
-                    <a href="#" class="lecturer-sidebar-link active flex items-center px-4 py-2.5 text-sm font-medium rounded-lg" data-content="lecturer-modules-content">
-                        <i data-feather="grid" class="w-5 h-5 mr-3"></i> Modules
-                    </a>
-                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-students-content">
-                        <i data-feather="users" class="w-5 h-5 mr-3"></i> Students
-                    </a>
-                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-attendance-content">
-                        <i data-feather="user-check" class="w-5 h-5 mr-3"></i> Attendance
-                    </a>
-                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-submissions-content">
-                        <i data-feather="inbox" class="w-5 h-5 mr-3"></i> Submissions
-                    </a>
-                    <a href="#" class="lecturer-sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100" data-content="lecturer-scores-content">
-                        <i data-feather="award" class="w-5 h-5 mr-3"></i> Scores
-                    </a>
-                </nav>
-                <div class="p-4 mt-auto border-t">
-                     <button id="lecturer-logout" class="w-full flex items-center justify-center bg-slate-100 hover:bg-red-100 text-slate-700 hover:text-red-700 py-2.5 px-4 rounded-lg transition-all">
-                        <i data-feather="log-out" class="h-5 w-5 mr-2"></i>
-                        <span>Logout</span>
-                    </button>
-                </div>
-            </aside>
-            
-            <!-- Main Content -->
-            <main class="flex-grow p-8 overflow-y-auto">
-                 <div id="lecturer-modules-content" class="lecturer-tab-content">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Module Management</h1>
-                    <div id="lecturer-modules-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                        <!-- Lecturer module cards will be rendered here -->
-                    </div>
-                </div>
-                <div id="lecturer-students-content" class="lecturer-tab-content hidden">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Registered Students</h1>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="students-table-body"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div id="lecturer-attendance-content" class="lecturer-tab-content hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <h1 class="text-3xl font-bold text-gray-800">Student Attendance</h1>
-                        <div>
-                            <label for="attendance-meeting-select" class="text-sm font-medium text-gray-700 mr-2">Select Meeting:</label>
-                            <select id="attendance-meeting-select" class="rounded-md border-gray-300 shadow-sm"></select>
-                        </div>
-                    </div>
-                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="attendance-table-body"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                 <div id="lecturer-submissions-content" class="lecturer-tab-content hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <h1 class="text-3xl font-bold text-gray-800">Assignment Submissions</h1>
-                        <div>
-                            <label for="submission-meeting-select" class="text-sm font-medium text-gray-700 mr-2">Select Meeting:</label>
-                            <select id="submission-meeting-select" class="rounded-md border-gray-300 shadow-sm"></select>
-                        </div>
-                    </div>
-                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="submission-table-body"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div id="lecturer-scores-content" class="lecturer-tab-content hidden">
-                     <div class="flex justify-between items-center mb-6">
-                        <h1 class="text-3xl font-bold text-gray-800">Student Scores</h1>
-                        <button id="export-scores-btn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-all flex items-center shadow-sm">
-                            <i data-feather="download" class="w-4 h-4 mr-2"></i> Export to Excel
-                        </button>
-                    </div>
-                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50" id="scores-table-head">
-                                    <!-- Header will be dynamically generated -->
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="scores-table-body">
-                                    <!-- Scores will be dynamically inserted here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-
-        <!-- Add/Edit Material Modal -->
-        <div id="material-modal" class="modal fixed inset-0 overflow-y-auto hidden">
-            <div class="flex items-center justify-center min-h-screen p-4">
-                <div class="modal-backdrop"></div>
-                <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-4xl sm:w-full z-50">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="material-modal-title">Edit Material</h3>
-                        <form id="material-form" class="mt-4 space-y-4">
-                           <input type="hidden" id="material-id">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="material-meeting-number" class="block text-sm font-medium text-gray-700">Meeting Number</label>
-                                    <select id="material-meeting-number" class="mt-1 block w-full pl-3 pr-10 py-2 border-gray-300 rounded-md"></select>
-                                </div>
-                                <div>
-                                    <label for="material-title" class="block text-sm font-medium text-gray-700">Title</label>
-                                    <input type="text" id="material-title" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md">
-                                </div>
-                            </div>
-                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Content</label>
-                                <div id="editor-container"></div>
-                            </div>
-                             <div>
-                                <label for="material-file" class="block text-sm font-medium text-gray-700">Primary File Attachment (Optional)</label>
-                                <input type="file" id="material-file" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                                <p id="existing-file" class="text-sm text-gray-500 mt-1"></p>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse items-center">
-                        <button type="button" id="save-material" class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 sm:ml-3">Save</button>
-                        <button type="button" id="cancel-material" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3">Cancel</button>
-                        <button type="button" id="delete-material" class="hidden mt-3 sm:mt-0 mr-auto w-full sm:w-auto inline-flex justify-center rounded-md border border-red-300 shadow-sm px-4 py-2 bg-red-50 text-base font-medium text-red-700 hover:bg-red-100">Delete Material</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quiz Builder Modal (Lecturer) -->
-        <div id="quiz-builder-modal" class="modal fixed inset-0 overflow-y-auto hidden">
-            <div class="flex items-center justify-center min-h-screen">
-                <div class="modal-backdrop"></div>
-                <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-3xl sm:w-full z-50">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="quiz-builder-modal-title">Create New Quiz</h3>
-                        <form id="quiz-builder-form" class="mt-4 space-y-4">
-                            <input type="hidden" id="quiz-id">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="quiz-title" class="block text-sm font-medium text-gray-700">Quiz Title</label>
-                                    <input type="text" id="quiz-title" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md">
-                                </div>
-                                <div>
-                                    <label for="quiz-meeting-number" class="block text-sm font-medium text-gray-700">Meeting Number</label>
-                                    <select id="quiz-meeting-number" class="mt-1 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md"></select>
-                                </div>
-                            </div>
-                            <hr>
-                            <div id="questions-container" class="space-y-6">
-                                <!-- Questions will be added here -->
-                            </div>
-                        </form>
-                        <button type="button" id="add-question" class="mt-4 text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
-                            <i data-feather="plus-circle" class="mr-2"></i> Add Question
-                        </button>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse items-center">
-                        <button type="button" id="save-quiz" class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 sm:ml-3">Save Quiz</button>
-                        <button type="button" id="cancel-quiz-builder" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3">Cancel</button>
-                        <button type="button" id="delete-quiz" class="hidden mt-3 sm:mt-0 mr-auto w-full sm:w-auto inline-flex justify-center rounded-md border border-red-300 shadow-sm px-4 py-2 bg-red-50 text-base font-medium text-red-700 hover:bg-red-100">Delete Quiz</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quiz Taker Modal (Student) -->
-        <div id="quiz-taker-modal" class="modal fixed inset-0 overflow-y-auto hidden">
-            <div class="flex items-center justify-center min-h-screen">
-                <div class="modal-backdrop"></div>
-                <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-2xl sm:w-full z-50">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="quiz-taker-modal-title">Quiz Title</h3>
-                        <div id="quiz-taker-content" class="mt-4">
-                            <!-- Quiz form or result will be shown here -->
-                        </div>
-                    </div>
-                    <div id="quiz-taker-footer" class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" id="submit-quiz-answers" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 sm:ml-3 sm:w-auto sm:text-sm">Submit</button>
-                        <button type="button" id="close-quiz-taker" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Change Password Modal (Student) -->
-        <div id="change-password-modal" class="modal fixed inset-0 overflow-y-auto hidden">
-            <div class="flex items-center justify-center min-h-screen p-4">
-                <div class="modal-backdrop"></div>
-                <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-md sm:w-full z-50">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Change Your Password</h3>
-                        <form id="change-password-form" class="mt-4 space-y-4">
-                            <div>
-                                <label for="old-password" class="block text-sm font-medium text-gray-700">Old Password</label>
-                                <input type="password" id="old-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
-                            </div>
-                             <div>
-                                <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
-                                <input type="password" id="new-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
-                            </div>
-                             <div>
-                                <label for="confirm-new-password" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-                                <input type="password" id="confirm-new-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse items-center">
-                        <button type="button" id="save-new-password" class="w-full sm:w-auto inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 sm:ml-3">Save Changes</button>
-                        <button type="button" id="cancel-change-password" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <!-- Kontainer untuk ikon animasi di latar belakang -->
+    <div class="icon-container">
+        <!-- Ikon-ikon tetap ada dengan opasitas rendah -->
+        <div class="floating-icon book"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M19 2H5C3.34 2 2 3.34 2 5v14c0 1.66 1.34 3 3 3h14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3zM5 4h14c.55 0 1 .45 1 1v1H4V5c0-.55.45-1 1-1zM4 8h16v11c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1V8zm6-3h4v1h-4V5z"/></svg></div>
+        <div class="floating-icon pencil"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
+        <div class="floating-icon bulb"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
+        <div class="floating-icon abc"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M20.41 6.41l-2.83-2.83c-.37-.37-.88-.58-1.41-.58H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7.83c0-.53-.21-1.04-.59-1.42zM12 18H6v-2h6v2zm6-4H6v-2h12v2zm-6-4H6V8h6v2z"/></svg></div>
+        <div class="floating-icon chat"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+        <div class="floating-icon star"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
     </div>
-    
-    <div id="notification"></div>
 
-    <script>
-        AOS.init();
-        feather.replace();
+    <!-- Konten utama di depan -->
+    <div class="text-center p-4 relative z-10 text-anim">
+        <h1 class="text-8xl font-bold text-sky-300 tracking-tighter" style="text-shadow: 0 0 15px rgba(125, 211, 252, 0.5);">404</h1>
+        <h2 class="text-2xl md:text-3xl font-semibold text-slate-200 mt-4">Oops! Sorry, Page is under construction.</h2>
+        <p class="text-slate-300 mt-12 text-base md:text-lg max-w-md mx-auto">
+            Tunggu sebentar ya.... Halaman sedang dalam perbaikan... Nanti kalau sudah OK, bakal dikasih tahu. :)
+        </p>
+    </div>
 
-        // --- KONFIGURASI SUPABASE ---
-        const SUPABASE_URL = 'https://fxuvhqdfwtefyobfkeuy.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4dXZocWRmd3RlZnlvYmZrZXV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0MTc4OTcsImV4cCI6MjA3Mzk5Mzg5N30.YKXDn0xMaL3ZFt5qGKTFJvxY1pY_4bs8RbMPXil0juo';
-        
-        const { createClient } = window.supabase;
-        const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // Static RPS Data
-        const rpsData = [
-            { week: 1, topic: "Introduction & Diagnostic Test", description: "Introduction, syllabus, and simple placement test." },
-            { week: 2, topic: "Daily Routines & Simple Present Tense", description: "Vocabulary for campus activities and transportation professions." },
-            { week: 3, topic: "Talking about Past Events: Simple Past Tense", description: "Telling experiences using transportation." },
-            { week: 4, topic: "Reading Skills 1: Skimming", description: "Understanding short descriptive texts about professions." },
-            { week: 5, topic: "Writing 1: Structuring a Paragraph", description: "Writing a topic sentence and a simple paragraph." },
-            { week: 6, topic: "Giving Simple Instructions & Imperatives", description: "Language for giving directions and safety procedures." },
-            { week: 7, topic: "Listening Skills: Announcements", description: "Listening to announcements at airports and stations." },
-            { week: 8, topic: "MIDTERM EXAM (UTS)", description: "Written test covering multiple choice and fill-in-the-blank questions." },
-            { week: 9, topic: "Future Plans & Simple Future Tense", description: "Discussing travel plans and future transportation technology." },
-            { week: 10, topic: "Reading Skills 2: Scanning", description: "Reading articles for specific information." },
-            { week: 11, topic: "Writing 2: Descriptive Paragraph", description: "Writing a descriptive paragraph about a transportation place." },
-            { week: 12, topic: "Speaking & Presentation 1", description: "Presenting the descriptive paragraph in front of the class." },
-            { week: 13, topic: "Comparing & Contrasting", description: "Comparing various modes of transportation." },
-            { week: 14, topic: "Integrated Skills: Case Study", description: "Planning a trip (case study)." },
-            { week: 15, topic: "Review & Reflection", description: "Reviewing all materials and reflection." },
-            { week: 16, topic: "FINAL EXAM (UAS)", description: "Comprehensive test covering multiple choice and fill-in-the-blank questions." }
-        ];
-
-        // Global variable for Quill editor instance
-        let quill = null;
-        let fullStudentData = {}; // Cache for student view data
-
-        // --- DOM Elements ---
-        const loginPage = document.getElementById('login-page');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const showRegister = document.getElementById('show-register');
-        const backToLogin = document.getElementById('back-to-login');
-        
-        const studentDashboard = document.getElementById('student-dashboard');
-        const studentLogout = document.getElementById('student-logout');
-        
-        const lecturerDashboard = document.getElementById('lecturer-dashboard');
-        const lecturerLogout = document.getElementById('lecturer-logout');
-
-        // Material Modal Elements
-        const materialModal = document.getElementById('material-modal');
-        const materialForm = document.getElementById('material-form');
-        const saveMaterialBtn = document.getElementById('save-material');
-        const cancelMaterialBtn = document.getElementById('cancel-material');
-        const deleteMaterialBtn = document.getElementById('delete-material');
-
-        // Quiz Builder Elements
-        const quizBuilderModal = document.getElementById('quiz-builder-modal');
-        const cancelQuizBuilderBtn = document.getElementById('cancel-quiz-builder');
-        const saveQuizBtn = document.getElementById('save-quiz');
-        const deleteQuizBtn = document.getElementById('delete-quiz');
-        const addQuestionBtn = document.getElementById('add-question');
-        const questionsContainer = document.getElementById('questions-container');
-
-        // Quiz Taker Elements
-        const quizTakerModal = document.getElementById('quiz-taker-modal');
-        const closeQuizTakerBtn = document.getElementById('close-quiz-taker');
-        const submitQuizAnswersBtn = document.getElementById('submit-quiz-answers');
-        
-        // Change Password Elements
-        const changePasswordBtn = document.getElementById('change-password-btn');
-        const changePasswordModal = document.getElementById('change-password-modal');
-        const cancelChangePasswordBtn = document.getElementById('cancel-change-password');
-        const saveNewPasswordBtn = document.getElementById('save-new-password');
-        const changePasswordForm = document.getElementById('change-password-form');
-
-        const exportScoresBtn = document.getElementById('export-scores-btn');
-        const notification = document.getElementById('notification');
-        let notificationTimeout;
-        
-        // --- UTILITY & PAGE VISIBILITY FUNCTIONS ---
-        function showNotification(message, type = 'success') {
-            clearTimeout(notificationTimeout);
-            notification.textContent = message;
-            notification.className = '';
-            notification.classList.add(type, 'show');
-            notificationTimeout = setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        function populateMeetingOptions(selectElementId) {
-            const select = document.getElementById(selectElementId);
-            if (!select) return;
-            select.innerHTML = '';
-            rpsData.forEach(item => {
-                 const option = new Option(`Meeting ${item.week}: ${item.topic}`, item.week);
-                 select.add(option);
-            });
-        }
-        
-        function showLoginPage(show) {
-            if (show) {
-                loginPage.classList.remove('hidden');
-            } else {
-                loginPage.classList.add('hidden');
-            }
-        }
-        
-        async function showStudentDashboard(show) {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            if (show && user && user.role === 'student') {
-                studentDashboard.classList.remove('hidden');
-                document.getElementById('student-welcome').textContent = `Welcome, ${user.name}!`;
-                await renderStudentUnifiedView();
-            } else {
-                studentDashboard.classList.add('hidden');
-            }
-        }
-        
-        async function showLecturerDashboard(show) {
-             const user = JSON.parse(sessionStorage.getItem('user'));
-            if (show && user && user.role === 'lecturer') {
-                lecturerDashboard.classList.remove('hidden');
-                await renderLecturerModules();
-                 // Make sure icons are rendered on initial load
-                feather.replace();
-            } else {
-                lecturerDashboard.classList.add('hidden');
-            }
-        }
-
-        function updateClock() {
-            const studentClock = document.getElementById('student-clock');
-            const lecturerClock = document.getElementById('lecturer-clock');
-            
-            if (!studentClock && !lecturerClock) return;
-
-            const now = new Date();
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-            const dayName = days[now.getDay()];
-            const date = now.getDate();
-            const monthName = months[now.getMonth()];
-            const year = now.getFullYear();
-            
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-
-            const formattedTime = `${dayName}, ${date} ${monthName} ${year}, ${hours}:${minutes}:${seconds} WIB`;
-
-            if (studentClock && !studentDashboard.classList.contains('hidden')) {
-                studentClock.innerHTML = formattedTime;
-            }
-            if (lecturerClock && !lecturerDashboard.classList.contains('hidden')) {
-                lecturerClock.innerHTML = formattedTime;
-            }
-        }
-
-        // --- AUTH & NAVIGATION EVENT LISTENERS ---
-        showRegister.addEventListener('click', () => {
-            loginForm.classList.add('hidden');
-            registerForm.classList.remove('hidden');
-        });
-
-        backToLogin.addEventListener('click', () => {
-            registerForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-        });
-
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (username === 'guru123' && password === 'guru123') {
-                sessionStorage.setItem('user', JSON.stringify({ role: 'lecturer', username: 'guru123' }));
-                showLoginPage(false);
-                await showLecturerDashboard(true);
-            } else {
-                const { data, error } = await db.from('students').select('*').eq('nrp', username).eq('password', password).single();
-                if (data) {
-                    sessionStorage.setItem('user', JSON.stringify({ role: 'student', ...data }));
-                    showLoginPage(false);
-                    await showStudentDashboard(true);
-                } else {
-                    showNotification('Invalid Student ID or password', 'error');
-                }
-            }
-        });
-
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nrp = document.getElementById('reg-nrp').value;
-            const name = document.getElementById('reg-name').value;
-            const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('reg-confirm-password').value;
-            
-            if (password !== confirmPassword) {
-                showNotification('Passwords do not match', 'error');
-                return;
-            }
-
-            const { data: existingStudent } = await db.from('students').select('nrp').eq('nrp', nrp).single();
-            if (existingStudent) {
-                showNotification('Student ID already registered', 'error');
-                return;
-            }
-
-            const { error } = await db.from('students').insert([{ nrp, name, password }]);
-            if (error) {
-                showNotification('Registration failed: ' + error.message, 'error');
-            } else {
-                showNotification('Registration successful! Please login.');
-                registerForm.reset();
-                registerForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-            }
-        });
-
-        function logout() {
-            sessionStorage.removeItem('user');
-            showStudentDashboard(false);
-            showLecturerDashboard(false);
-            showLoginPage(true);
-        }
-
-        studentLogout.addEventListener('click', logout);
-        lecturerLogout.addEventListener('click', logout);
-
-        document.querySelectorAll('.lecturer-sidebar-link').forEach(tab => {
-            tab.addEventListener('click', async (e) => {
-                e.preventDefault();
-                
-                // Update active state for sidebar links
-                document.querySelectorAll('.lecturer-sidebar-link').forEach(t => {
-                    t.classList.remove('active');
-                    t.classList.add('text-gray-600', 'hover:bg-gray-100');
-                });
-                e.currentTarget.classList.add('active');
-                e.currentTarget.classList.remove('text-gray-600', 'hover:bg-gray-100');
-
-                // Hide all content tabs and show the selected one
-                document.querySelectorAll('.lecturer-tab-content').forEach(c => c.classList.add('hidden'));
-                const contentId = e.currentTarget.dataset.content;
-                document.getElementById(contentId).classList.remove('hidden');
-
-                // Load content for the selected tab
-                if (contentId === 'lecturer-students-content') {
-                    await renderLecturerStudents();
-                } else if (contentId === 'lecturer-scores-content') {
-                    await renderLecturerScores();
-                } else if (contentId === 'lecturer-attendance-content') {
-                    await renderLecturerAttendance();
-                } else if (contentId === 'lecturer-modules-content') {
-                    await renderLecturerModules();
-                } else if (contentId === 'lecturer-submissions-content') {
-                    await renderLecturerSubmissions();
-                }
-                 // Ensure icons are re-rendered if content changes
-                feather.replace();
-            });
-        });
-        
-        // --- MATERIAL MANAGEMENT ---
-        cancelMaterialBtn.addEventListener('click', () => materialModal.classList.add('hidden'));
-        saveMaterialBtn.addEventListener('click', saveMaterial);
-
-        function initializeQuillEditor() {
-            const toolbarOptions = [
-                [{ 'font': [] }],
-                [{ 'size': ['small', false, 'large', 'huge'] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'align': [] }],
-                ['link', 'image', 'video'],
-                ['clean']
-            ];
-            quill = new Quill('#editor-container', {
-                modules: { toolbar: toolbarOptions },
-                theme: 'snow'
-            });
-            quill.getModule('toolbar').addHandler('image', selectLocalImage);
-        }
-        
-        function selectLocalImage() {
-            const input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-            input.click();
-
-            input.onchange = async () => {
-                const file = input.files[0];
-                if (/^image\//.test(file.type)) {
-                    const filePath = `public/materials/${Date.now()}-${file.name}`;
-                    const { error: uploadError } = await db.storage.from('materials').upload(filePath, file);
-                    if (uploadError) {
-                        showNotification('Image upload failed: ' + uploadError.message, 'error');
-                        return;
-                    }
-                    const { data: urlData } = db.storage.from('materials').getPublicUrl(filePath);
-                    const range = quill.getSelection(true);
-                    quill.insertEmbed(range.index, 'image', urlData.publicUrl);
-                } else {
-                    showNotification('Only images are allowed', 'error');
-                }
-            };
-        }
-
-        function openMaterialModal(material = null, meetingNumber = null) {
-            if (!quill) initializeQuillEditor();
-            materialForm.reset();
-            quill.root.innerHTML = '';
-            
-            const modalTitle = document.getElementById('material-modal-title');
-            const materialIdInput = document.getElementById('material-id');
-            const existingFileP = document.getElementById('existing-file');
-            const meetingSelect = document.getElementById('material-meeting-number');
-
-            if (material) {
-                modalTitle.textContent = `Edit Material for Meeting ${material.meeting}`;
-                materialIdInput.value = material.id;
-                meetingSelect.value = material.meeting;
-                document.getElementById('material-title').value = material.title;
-                quill.root.innerHTML = material.content || '';
-                existingFileP.textContent = `Current file: ${material.file_name || 'None'}`;
-                meetingSelect.disabled = true;
-                deleteMaterialBtn.classList.remove('hidden');
-                deleteMaterialBtn.onclick = () => deleteMaterial(material.id);
-            } else {
-                modalTitle.textContent = `Add Material for Meeting ${meetingNumber}`;
-                materialIdInput.value = '';
-                existingFileP.textContent = '';
-                meetingSelect.value = meetingNumber;
-                meetingSelect.disabled = true;
-                deleteMaterialBtn.classList.add('hidden');
-            }
-            materialModal.classList.remove('hidden');
-        }
-        
-        async function saveMaterial() {
-            const id = document.getElementById('material-id').value;
-            const meeting = document.getElementById('material-meeting-number').value;
-            const title = document.getElementById('material-title').value;
-            const content = quill.root.innerHTML;
-            const fileInput = document.getElementById('material-file');
-            const file = fileInput.files[0];
-
-            if (!title || quill.getLength() <= 1) {
-                showNotification('Title and content are required', 'error');
-                return;
-            }
-
-            let file_url = null;
-            let file_name = null;
-            
-            if (file) {
-                const filePath = `public/materials/${Date.now()}-${file.name}`;
-                const { error: uploadError } = await db.storage.from('materials').upload(filePath, file);
-                if (uploadError) {
-                    showNotification('File upload failed: ' + uploadError.message, 'error');
-                    return;
-                }
-                const { data: urlData } = db.storage.from('materials').getPublicUrl(filePath);
-                file_url = urlData.publicUrl;
-                file_name = file.name;
-            }
-
-            const materialData = { meeting, title, content };
-            if (file_url) {
-                materialData.file_url = file_url;
-                materialData.file_name = file_name;
-            }
-
-            const { error } = await db.from('materials').upsert({ id: id || undefined, ...materialData });
-
-            if (error) {
-                showNotification('Failed to save material: ' + error.message, 'error');
-            } else {
-                showNotification('Material saved successfully!');
-                materialModal.classList.add('hidden');
-                await renderLecturerModules();
-            }
-        }
-        
-        async function deleteMaterial(materialId) {
-            if (confirm('Are you sure you want to delete this material?')) {
-                const { error } = await db.from('materials').delete().eq('id', materialId);
-                if (error) {
-                    showNotification('Failed to delete material: ' + error.message, 'error');
-                } else {
-                    showNotification('Material deleted.');
-                    materialModal.classList.add('hidden');
-                    await renderLecturerModules();
-                }
-            }
-        }
-
-        // --- QUIZ BUILDER (LECTURER) ---
-        cancelQuizBuilderBtn.addEventListener('click', () => quizBuilderModal.classList.add('hidden'));
-        addQuestionBtn.addEventListener('click', () => addQuestionField());
-        saveQuizBtn.addEventListener('click', saveQuiz);
-
-        async function openQuizBuilderModal(quiz = null, meetingNumber = null) {
-            document.getElementById('quiz-builder-form').reset();
-            questionsContainer.innerHTML = '';
-            document.getElementById('quiz-id').value = '';
-            const meetingSelect = document.getElementById('quiz-meeting-number');
-
-            const title = document.getElementById('quiz-builder-modal-title');
-            if (quiz) {
-                title.textContent = 'Edit Quiz';
-                document.getElementById('quiz-id').value = quiz.id;
-                document.getElementById('quiz-title').value = quiz.title;
-                meetingSelect.value = quiz.meeting;
-                meetingSelect.disabled = true;
-                deleteQuizBtn.classList.remove('hidden');
-                deleteQuizBtn.onclick = () => deleteQuiz(quiz.id);
-                
-                const { data: questions } = await db.from('questions').select('*').eq('quiz_id', quiz.id).order('created_at');
-                if (questions && questions.length > 0) {
-                    questions.forEach(q => addQuestionField(q));
-                } else {
-                    addQuestionField();
-                }
-            } else {
-                title.textContent = 'Create New Quiz';
-                addQuestionField();
-                meetingSelect.value = meetingNumber;
-                meetingSelect.disabled = true;
-                deleteQuizBtn.classList.add('hidden');
-            }
-            quizBuilderModal.classList.remove('hidden');
-        }
-
-        function addQuestionField(questionData = null) {
-            const questionIndex = questionsContainer.children.length;
-            const div = document.createElement('div');
-            div.className = 'border p-4 rounded-md relative';
-            const questionType = questionData?.question_type || 'multiple_choice';
-
-            div.innerHTML = `
-                <div class="flex justify-between items-center mb-2">
-                    <label class="block text-sm font-medium text-gray-700">Question ${questionIndex + 1}</label>
-                    <div class="flex items-center space-x-4">
-                         <label class="text-sm"><input type="radio" name="q-type-${questionIndex}" value="multiple_choice" class="question-type-selector" ${questionType === 'multiple_choice' ? 'checked' : ''}> Multiple Choice</label>
-                         <label class="text-sm"><input type="radio" name="q-type-${questionIndex}" value="fill_in_the_blank" class="question-type-selector" ${questionType === 'fill_in_the_blank' ? 'checked' : ''}> Fill in the Blank</label>
-                         <button type="button" class="text-red-500 hover:text-red-700 remove-question-btn"><i data-feather="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                </div>
-                <input type="hidden" class="question-id" value="${questionData?.id || ''}">
-                <textarea class="question-text mt-1 w-full p-2 border rounded-md" required placeholder="Enter the question text...">${questionData?.question_text || ''}</textarea>
-                
-                <div class="options-container mt-2 space-y-2 ${questionType === 'multiple_choice' ? '' : 'hidden'}">
-                    ${[0, 1, 2, 3].map(i => `
-                        <div class="flex items-center">
-                            <input type="radio" name="correct-opt-${questionIndex}" value="${i}" class="correct-option h-4 w-4 text-indigo-600" ${questionData?.correct_option === i ? 'checked' : ''}>
-                            <input type="text" placeholder="Option ${i + 1}" value="${questionData?.options?.[i] || ''}" class="option-text ml-2 w-full p-2 border rounded-md">
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="answer-container mt-2 ${questionType === 'fill_in_the_blank' ? '' : 'hidden'}">
-                     <input type="text" placeholder="Enter correct answer" value="${questionData?.correct_answer_text || ''}" class="correct-answer-text w-full p-2 border rounded-md">
-                </div>
-            `;
-            questionsContainer.appendChild(div);
-            
-            div.querySelector('.remove-question-btn').addEventListener('click', () => div.remove());
-            div.querySelectorAll('.question-type-selector').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    const isMc = e.target.value === 'multiple_choice';
-                    div.querySelector('.options-container').classList.toggle('hidden', !isMc);
-                    div.querySelector('.answer-container').classList.toggle('hidden', isMc);
-                });
-            });
-            feather.replace();
-        }
-
-        async function saveQuiz() {
-            const quizId = document.getElementById('quiz-id').value;
-            const title = document.getElementById('quiz-title').value;
-            const meeting = document.getElementById('quiz-meeting-number').value;
-
-            if (!title) {
-                showNotification('Quiz title is required', 'error');
-                return;
-            }
-
-            try {
-                // Upsert quiz details first
-                const { data: quizData, error: quizError } = await db.from('quizzes').upsert({ id: quizId || undefined, title, meeting }).select().single();
-                if (quizError) throw quizError;
-
-                // 1. Get existing question IDs from DB before making changes
-                let existingQuestionIds = [];
-                if (quizId) {
-                    const { data: existingQuestions } = await db.from('questions').select('id').eq('quiz_id', quizId);
-                    if (existingQuestions) {
-                        existingQuestionIds = existingQuestions.map(q => q.id);
-                    }
-                }
-                
-                // 2. Process form elements
-                const questionElements = questionsContainer.querySelectorAll('.border.p-4');
-                const questionsToInsert = [];
-                const questionsToUpdate = [];
-                const idsInForm = []; // Keep track of question IDs still in the form
-                let validationError = false;
-
-                questionElements.forEach((el, i) => {
-                    if (validationError) return;
-
-                    const id_val = el.querySelector('.question-id').value;
-                    const question_type = el.querySelector('.question-type-selector:checked').value;
-                    const question_text = el.querySelector('.question-text').value;
-
-                    const questionPayloadData = {
-                        quiz_id: quizData.id,
-                        question_text,
-                        question_type,
-                        options: null,
-                        correct_option: null,
-                        correct_answer_text: null
-                    };
-                    
-                    if (question_type === 'multiple_choice') {
-                        const correctOptionValue = el.querySelector('.correct-option:checked')?.value;
-                        questionPayloadData.options = Array.from(el.querySelectorAll('.option-text')).map(input => input.value);
-                        if (!question_text || correctOptionValue === undefined || questionPayloadData.options.some(opt => !opt)) {
-                            showNotification(`Please fill all fields for multiple choice question #${i + 1}`, 'error');
-                            validationError = true;
-                        }
-                        questionPayloadData.correct_option = parseInt(correctOptionValue, 10);
-                    } else { // fill_in_the_blank
-                        questionPayloadData.correct_answer_text = el.querySelector('.correct-answer-text').value;
-                        if (!question_text || !questionPayloadData.correct_answer_text) {
-                            showNotification(`Please fill all fields for fill-in-the-blank question #${i + 1}`, 'error');
-                            validationError = true;
-                        }
-                    }
-
-                    if (!validationError) {
-                        if (id_val) {
-                            const numericId = parseInt(id_val, 10);
-                            questionsToUpdate.push({ id: numericId, ...questionPayloadData });
-                            idsInForm.push(numericId);
-                        } else {
-                            questionsToInsert.push(questionPayloadData);
-                        }
-                    }
-                });
-
-                if (validationError) return;
-                
-                // 3. Perform inserts and updates
-                let insertError, updateError;
-                if (questionsToInsert.length > 0) {
-                    const { error } = await db.from('questions').insert(questionsToInsert);
-                    if (error) insertError = error;
-                }
-                if (questionsToUpdate.length > 0) {
-                    const { error } = await db.from('questions').upsert(questionsToUpdate);
-                    if (error) updateError = error;
-                }
-                if (insertError || updateError) throw (insertError || updateError);
-
-                // 4. Perform deletions for questions that were removed from the form
-                const idsToDelete = existingQuestionIds.filter(id => !idsInForm.includes(id));
-                if (idsToDelete.length > 0) {
-                    const { error: deleteError } = await db.from('questions').delete().in('id', idsToDelete);
-                    if (deleteError) throw deleteError;
-                }
-
-                showNotification('Quiz saved successfully!');
-                quizBuilderModal.classList.add('hidden');
-                await renderLecturerModules();
-
-            } catch (error) {
-                console.error("Error saving quiz:", error);
-                showNotification('Error saving quiz: ' + error.message, 'error');
-            }
-        }
-
-        async function deleteQuiz(quizId) {
-            if (confirm('Are you sure you want to delete this quiz and all its questions? This action cannot be undone.')) {
-                const { error } = await db.from('quizzes').delete().eq('id', quizId);
-                if (error) {
-                    showNotification('Failed to delete quiz: ' + error.message, 'error');
-                } else {
-                    showNotification('Quiz deleted successfully.');
-                    quizBuilderModal.classList.add('hidden');
-                    await renderLecturerModules();
-                }
-            }
-        }
-
-        // --- QUIZ TAKER (STUDENT) ---
-        closeQuizTakerBtn.addEventListener('click', () => quizTakerModal.classList.add('hidden'));
-
-        async function openQuizTakerModal(quizId) {
-            const { data: quiz } = await db.from('quizzes').select('*').eq('id', quizId).single();
-            if (!quiz) return;
-
-            document.getElementById('quiz-taker-modal-title').textContent = quiz.title;
-            const contentDiv = document.getElementById('quiz-taker-content');
-            contentDiv.innerHTML = '<p>Loading questions...</p>';
-            quizTakerModal.classList.remove('hidden');
-
-            const { data: questions } = await db.from('questions').select('*').eq('quiz_id', quizId).order('created_at');
-            if (!questions || questions.length === 0) {
-                contentDiv.innerHTML = '<p>This quiz has no questions yet.</p>';
-                submitQuizAnswersBtn.classList.add('hidden');
-                return;
-            }
-            
-            let formHTML = `<form id="quiz-taker-form" class="space-y-6">`;
-            questions.forEach((q, index) => {
-                formHTML += `<div><p class="font-medium text-gray-800">${index + 1}. ${q.question_text}</p>`;
-                if (q.question_type === 'multiple_choice') {
-                     formHTML += `<div class="space-y-2 mt-2 ml-4">
-                            ${q.options.map((opt, optIndex) => `<label class="flex items-center"><input type="radio" name="q-${q.id}" value="${optIndex}" class="h-4 w-4 text-indigo-600" required><span class="ml-2 text-gray-700">${opt}</span></label>`).join('')}
-                        </div>`;
-                } else { // fill_in_the_blank
-                    formHTML += `<div class="mt-2"><input type="text" name="q-${q.id}" class="w-full p-2 border rounded-md" required></div>`;
-                }
-                formHTML += `</div>`;
-            });
-            formHTML += '</form>';
-            contentDiv.innerHTML = formHTML;
-
-            submitQuizAnswersBtn.classList.remove('hidden');
-            submitQuizAnswersBtn.onclick = () => submitQuiz(quiz.id, questions);
-        }
-
-        async function submitQuiz(quizId, questions) {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            const form = document.getElementById('quiz-taker-form');
-            if (!form.reportValidity()) {
-                 showNotification('Please answer all questions', 'error');
-                 return;
-            }
-            const formData = new FormData(form);
-            let correctAnswers = 0;
-            
-            questions.forEach(q => {
-                const userAnswer = formData.get(`q-${q.id}`);
-                if (q.question_type === 'multiple_choice') {
-                    if (userAnswer !== null && parseInt(userAnswer, 10) === q.correct_option) correctAnswers++;
-                } else { // fill_in_the_blank
-                    if (userAnswer && userAnswer.trim().toLowerCase() === q.correct_answer_text.trim().toLowerCase()) {
-                        correctAnswers++;
-                    }
-                }
-            });
-
-            const score = Math.round((correctAnswers / questions.length) * 100);
-            
-            const { error } = await db.from('scores').upsert({ student_id: user.id, quiz_id: quizId, score }, { onConflict: 'student_id, quiz_id' });
-
-
-            if (error) {
-                showNotification('Error submitting score: ' + error.message, 'error');
-            } else {
-                document.getElementById('quiz-taker-content').innerHTML = `<div class="text-center">
-                                <h2 class="text-2xl font-bold text-indigo-600">Quiz Complete!</h2>
-                                <p class="mt-2 text-lg text-gray-700">Your score is:</p>
-                                <p class="text-5xl font-bold text-gray-900 mt-4">${score}</p>
-                            </div>`;
-                submitQuizAnswersBtn.classList.add('hidden');
-                await renderStudentUnifiedView();
-            }
-        }
-        
-        // --- RENDER FUNCTIONS ---
-        async function renderLecturerStudents() {
-            // Menambahkan penanganan error dan pesan yang lebih informatif
-            const { data: students, error } = await db.from('students').select('*').order('name');
-            
-            if (error) {
-                console.error("Error fetching students:", error);
-                showNotification("Could not fetch student data. Check console for details.", "error");
-                return;
-            }
-
-            const tableBody = document.getElementById('students-table-body');
-            tableBody.innerHTML = '';
-            
-            if (students && students.length > 0) {
-                students.forEach(student => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td class="px-6 py-4 text-sm text-gray-500">${student.nrp}</td>
-                                     <td class="px-6 py-4 text-sm font-medium text-gray-900">${student.name}</td>
-                                     <td class="px-6 py-4 text-sm font-medium space-x-4">
-                                         <button class="reset-student text-yellow-600 hover:text-yellow-900" data-id="${student.id}" data-name="${student.name}">Reset</button>
-                                         <button class="delete-student text-red-600 hover:text-red-900" data-id="${student.id}">Delete</button>
-                                     </td>`;
-                    row.querySelector('.delete-student').addEventListener('click', async (e) => {
-                        if (confirm('Are you sure you want to delete this student account? This action cannot be undone.')) {
-                            const { error } = await db.from('students').delete().eq('id', e.target.dataset.id);
-                             if (error) {
-                                showNotification('Failed to delete student: ' + error.message, 'error');
-                            } else {
-                                showNotification('Student deleted successfully.');
-                                await renderLecturerStudents();
-                            }
-                        }
-                    });
-                    row.querySelector('.reset-student').addEventListener('click', async (e) => {
-                        const studentId = e.target.dataset.id;
-                        const studentName = e.target.dataset.name;
-                        if (confirm(`Are you sure you want to reset all progress for ${studentName}? This will delete all scores and attendance data.`)) {
-                            await db.from('scores').delete().eq('student_id', studentId);
-                            await db.from('attendance').delete().eq('student_id', studentId);
-                            await db.from('submissions').delete().eq('student_id', studentId);
-                            showNotification(`${studentName}'s progress has been reset.`);
-                            await renderLecturerScores();
-                        }
-                    });
-                    tableBody.appendChild(row);
-                });
-            } else {
-                // Memberikan pesan yang lebih jelas jika data tidak ditemukan
-                tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4">No students found. This might be due to Row Level Security (RLS) policies.</td></tr>';
-            }
-        }
-
-
-        async function renderStudentUnifiedView() {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            const listContainer = document.getElementById('student-module-list');
-            const detailContainer = document.getElementById('student-module-detail');
-            listContainer.innerHTML = '<div>Loading modules...</div>';
-            detailContainer.innerHTML = `<p class="text-center text-gray-500">Select a module from the left to view its content.</p>`;
-
-            const [meetingsRes, materialsRes, quizzesRes, scoresRes, attendanceRes, submissionsRes] = await Promise.all([
-                db.from('meetings').select('*').eq('is_unlocked', true),
-                db.from('materials').select('*'),
-                db.from('quizzes').select('*'),
-                db.from('scores').select('*').eq('student_id', user.id),
-                db.from('attendance').select('*').eq('student_id', user.id),
-                db.from('submissions').select('*').eq('student_id', user.id)
-            ]);
-            
-            fullStudentData.meetings = meetingsRes.data || [];
-            fullStudentData.materials = materialsRes.data || [];
-            fullStudentData.quizzes = quizzesRes.data || [];
-            fullStudentData.scores = scoresRes.data || [];
-            fullStudentData.attendance = attendanceRes.data || [];
-            fullStudentData.submissions = submissionsRes.data || [];
-            
-            const unlockedMeetingNumbers = fullStudentData.meetings.map(m => m.meeting_number);
-            const visibleRpsData = rpsData.filter(item => unlockedMeetingNumbers.includes(item.week));
-
-            listContainer.innerHTML = ''; 
-
-            if (visibleRpsData.length === 0) {
-                detailContainer.innerHTML = '<p class="text-center text-gray-500 italic mt-4">No learning modules have been unlocked by the lecturer yet.</p>';
-                listContainer.innerHTML = '<p class="text-center text-sm text-gray-400">No meetings available.</p>';
-                return;
-            }
-
-            visibleRpsData.forEach(rpsItem => {
-                const meetingNumber = rpsItem.week;
-                const listItem = document.createElement('div');
-                listItem.className = 'module-item p-4 rounded-md cursor-pointer text-slate-300 hover:bg-slate-700 hover:text-white transition-all';
-                listItem.dataset.meetingNumber = meetingNumber;
-                listItem.innerHTML = `
-                    <p class="font-semibold">${rpsItem.topic}</p>
-                `;
-                listItem.addEventListener('click', () => {
-                    document.querySelectorAll('.module-item').forEach(item => item.classList.remove('active'));
-                    listItem.classList.add('active');
-                    renderModuleDetail(meetingNumber);
-                });
-                listContainer.appendChild(listItem);
-            });
-            
-            if (listContainer.firstChild) {
-                listContainer.firstChild.click();
-            }
-        }
-        
-        function renderModuleDetail(meetingNumber) {
-            const detailContainer = document.getElementById('student-module-detail');
-            const rpsItem = rpsData.find(item => item.week == meetingNumber);
-            const material = fullStudentData.materials.find(m => m.meeting == meetingNumber);
-            const quiz = fullStudentData.quizzes.find(q => q.meeting == meetingNumber);
-            const score = fullStudentData.scores.find(s => quiz && s.quiz_id === quiz.id);
-            const attendance = fullStudentData.attendance.find(a => a.meeting_number == meetingNumber);
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            const meetingData = fullStudentData.meetings.find(m => m.meeting_number == meetingNumber);
-            const submission = fullStudentData.submissions.find(s => s.meeting_number == meetingNumber);
-
-            let meetingTitle = `Meeting ${meetingNumber}: ${rpsItem.topic}`;
-            if (meetingNumber == 8) meetingTitle = 'MIDTERM EXAM (UTS)';
-            if (meetingNumber == 16) meetingTitle = 'FINAL EXAM (UAS)';
-            
-            let moduleHTML = `<h3 class="text-3xl font-bold text-gray-800 mb-2">${meetingTitle}</h3>
-                                  <p class="text-gray-500 mb-6 pb-4 border-b">${rpsItem.description}</p>`;
-            
-            if (!attendance) {
-                 moduleHTML += `<div class="text-center p-8 bg-gray-50 rounded-lg">
-                                     <h4 class="text-lg font-semibold mb-4 text-gray-700">You need to mark your attendance to view this module's content.</h4>
-                                     <button data-meeting-number="${meetingNumber}" class="mark-present-btn bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-all font-semibold">Mark as Present</button>
-                                 </div>`;
-            } else {
-                let hasContent = false;
-                if (material) {
-                    hasContent = true;
-                    moduleHTML += `<div class="prose max-w-none ql-snow mb-8"><div class="ql-editor">${material.content}</div></div>`;
-                }
-                
-                if (quiz) {
-                    hasContent = true;
-                    if (material) moduleHTML += '<hr class="my-6">';
-                    
-                    if (meetingData?.quiz_enabled) {
-                         const buttonOrScoreHTML = score
-                            ? `<div class="text-right"><p class="font-bold text-2xl text-indigo-600">${score.score}</p><p class="text-sm text-gray-500">Your Score</p></div>`
-                            : `<button data-quiz-id="${quiz.id}" class="take-quiz-btn bg-green-600 text-white px-5 py-2 rounded-md hover:bg-green-700 font-semibold">Take Quiz</button>`;
-                        moduleHTML += `<div class="bg-gray-50 rounded-lg p-6 flex justify-between items-center">
-                            <div class="flex items-center"><i data-feather="edit-3" class="text-green-600 mr-4"></i><h4 class="text-xl font-semibold text-gray-800">${quiz.title}</h4></div>
-                            ${buttonOrScoreHTML}
-                        </div>`;
-                    } else {
-                        moduleHTML += `<div class="bg-gray-50 rounded-lg p-6 flex justify-between items-center">
-                            <div class="flex items-center"><i data-feather="slash" class="text-gray-500 mr-4"></i><h4 class="text-xl font-semibold text-gray-800">${quiz.title}</h4></div>
-                            <p class="text-sm text-gray-600">Quiz is currently disabled.</p>
-                        </div>`;
-                    }
-                }
-
-                // Submission Section
-                if (meetingData?.assignment_enabled) {
-                    hasContent = true;
-                    if (material || quiz) moduleHTML += '<hr class="my-8">';
-                    moduleHTML += `<div class="bg-blue-50 rounded-lg p-6">
-                        <h4 class="text-xl font-semibold text-gray-800 mb-4 flex items-center"><i data-feather="upload" class="text-blue-600 mr-3"></i>Assignment Submission</h4>`;
-
-                    if (submission) {
-                        moduleHTML += `<p class="text-gray-700">You have submitted:</p>
-                            <a href="${submission.file_url}" target="_blank" class="font-medium text-indigo-600 hover:text-indigo-800">${submission.file_name}</a>
-                            <p class="text-sm text-gray-500 mt-4">To replace the file, please upload a new one.</p>
-                            <input type="file" class="submission-file-input mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                            <button data-meeting-number="${meetingNumber}" class="submit-assignment-btn mt-2 bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 font-semibold">Upload New File</button>`;
-                    } else {
-                        moduleHTML += `<p class="text-gray-700 mb-4">Please upload your assignment file for this meeting.</p>
-                            <input type="file" class="submission-file-input block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                            <button data-meeting-number="${meetingNumber}" class="submit-assignment-btn mt-4 bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 font-semibold">Upload File</button>`;
-                    }
-                    moduleHTML += `</div>`;
-                } else if (meetingData) { // Show disabled state only if meeting exists
-                     hasContent = true;
-                     if (material || quiz) moduleHTML += '<hr class="my-8">';
-                     moduleHTML += `<div class="bg-gray-50 rounded-lg p-6">
-                        <h4 class="text-xl font-semibold text-gray-800 mb-2 flex items-center"><i data-feather="slash" class="text-gray-500 mr-3"></i>Assignment Submission</h4>
-                        <p class="text-gray-600">File submission is currently disabled by the lecturer for this meeting.</p>
-                     </div>`;
-                }
-
-                if (!hasContent) {
-                    moduleHTML += '<p class="text-center text-gray-400 italic mt-8">Content for this module will be available soon.</p>';
-                }
-            }
-            
-            detailContainer.innerHTML = moduleHTML;
-            feather.replace();
-            detailContainer.querySelectorAll('.take-quiz-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => openQuizTakerModal(e.currentTarget.dataset.quizId));
-            });
-            detailContainer.querySelectorAll('.mark-present-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const meetingNum = e.currentTarget.dataset.meetingNumber;
-                    const { error } = await db.from('attendance').insert({ student_id: user.id, meeting_number: meetingNum });
-                    if(error) {
-                        showNotification('Attendance already marked or error: ' + error.message, 'error');
-                    } else {
-                        showNotification(`You are marked present for Meeting ${meetingNum}.`);
-                        fullStudentData.attendance.push({student_id: user.id, meeting_number: parseInt(meetingNum, 10) });
-                        renderModuleDetail(meetingNum);
-                    }
-                });
-            });
-             detailContainer.querySelectorAll('.submit-assignment-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const meetingNum = e.currentTarget.dataset.meetingNumber;
-                    const fileInput = e.currentTarget.previousElementSibling;
-                    handleFileSubmission(meetingNum, fileInput);
-                });
-            });
-        }
-
-        async function handleFileSubmission(meetingNumber, fileInput) {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            const file = fileInput.files[0];
-
-            if (!file) {
-                showNotification('Please select a file to upload.', 'error');
-                return;
-            }
-
-            showNotification('Uploading file...', 'success');
-            const filePath = `public/submissions/${user.id}/${meetingNumber}-${file.name}`;
-            
-            const { error: uploadError } = await db.storage
-                .from('materials')
-                .upload(filePath, file, { upsert: true });
-
-            if (uploadError) {
-                showNotification('File upload failed: ' + uploadError.message, 'error');
-                return;
-            }
-
-            const { data: urlData } = db.storage.from('materials').getPublicUrl(filePath);
-
-            const submissionData = {
-                student_id: user.id,
-                meeting_number: meetingNumber,
-                file_name: file.name,
-                file_url: urlData.publicUrl
-            };
-            
-            const { error: dbError } = await db.from('submissions').upsert(submissionData, { onConflict: 'student_id, meeting_number' });
-            
-            if (dbError) {
-                showNotification('Failed to save submission record: ' + dbError.message, 'error');
-            } else {
-                showNotification('Assignment submitted successfully!');
-                await renderStudentUnifiedView();
-            }
-        }
-        
-        async function renderLecturerModules() {
-            const container = document.getElementById('lecturer-modules-list');
-            if (!container) return; // Guard clause
-            container.innerHTML = '<div>Loading modules...</div>';
-
-            const [meetingsRes, materialsRes, quizzesRes] = await Promise.all([
-                db.from('meetings').select('*'),
-                db.from('materials').select('*'),
-                db.from('quizzes').select('*')
-            ]);
-            
-            const meetings = meetingsRes.data || [];
-            const materials = materialsRes.data || [];
-            const quizzes = quizzesRes.data || [];
-            container.innerHTML = '';
-
-            rpsData.forEach(rpsItem => {
-                const meetingNumber = rpsItem.week;
-                const meeting = meetings.find(m => m.meeting_number == meetingNumber);
-                const material = materials.find(m => m.meeting == meetingNumber);
-                const quiz = quizzes.find(q => q.meeting == meetingNumber);
-
-                const card = document.createElement('div');
-                card.className = 'bg-white p-4 rounded-lg shadow-md flex flex-col transition-all hover:shadow-lg hover:-translate-y-1';
-                
-                let cardHTML = `
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="text-md font-bold text-gray-800">Meeting ${meetingNumber}</h4>
-                            <div class="flex items-center space-x-3">
-                                
-                                <div class="flex items-center space-x-1">
-                                    <label for="quiz-toggle-${meetingNumber}" class="text-xs text-gray-500 cursor-pointer">Quiz</label>
-                                    <div class="relative inline-block w-10 align-middle select-none">
-                                        <input type="checkbox" name="quiz-toggle" id="quiz-toggle-${meetingNumber}" class="quiz-toggle-checkbox toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" ${meeting?.quiz_enabled ? 'checked' : ''}/>
-                                        <label for="quiz-toggle-${meetingNumber}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center space-x-1">
-                                    <label for="submission-toggle-${meetingNumber}" class="text-xs text-gray-500 cursor-pointer">Uploads</label>
-                                    <div class="relative inline-block w-10 align-middle select-none">
-                                        <input type="checkbox" name="submission-toggle" id="submission-toggle-${meetingNumber}" class="submission-toggle-checkbox toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" ${meeting?.assignment_enabled ? 'checked' : ''}/>
-                                        <label for="submission-toggle-${meetingNumber}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                                    </div>
-                                </div>
-                                 <div class="flex items-center space-x-1">
-                                    <label for="unlock-toggle-${meetingNumber}" class="text-xs text-gray-500 cursor-pointer">Unlock</label>
-                                    <div class="relative inline-block w-10 align-middle select-none">
-                                        <input type="checkbox" name="unlock-toggle" id="unlock-toggle-${meetingNumber}" class="unlock-toggle-checkbox toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" ${meeting?.is_unlocked ? 'checked' : ''}/>
-                                        <label for="unlock-toggle-${meetingNumber}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mt-1">${rpsItem.topic}</p>
-                        <div class="text-xs mt-4 space-y-1">
-                            <p class="flex items-center ${material ? 'text-green-600' : 'text-gray-400'}"><i data-feather="${material ? 'check-circle' : 'circle'}" class="w-4 h-4 mr-2"></i> Material</p>
-                            <p class="flex items-center ${quiz ? 'text-green-600' : 'text-gray-400'}"><i data-feather="${quiz ? 'check-circle' : 'circle'}" class="w-4 h-4 mr-2"></i> Quiz / Exam</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4 border-t flex justify-end space-x-2">
-                        <button class="manage-material-btn text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded">Material</button>
-                        <button class="manage-quiz-btn text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded">${[8, 16].includes(meetingNumber) ? 'Exam' : 'Quiz'}</button>
-                    </div>
-                `;
-                card.innerHTML = cardHTML;
-                
-                card.querySelector('.unlock-toggle-checkbox').addEventListener('change', async (e) => {
-                    const { error } = await db.from('meetings').update({ is_unlocked: e.target.checked }).eq('meeting_number', meetingNumber);
-                    if (error) {
-                        showNotification('Error: ' + error.message, 'error');
-                        e.target.checked = !e.target.checked; // Revert on failure
-                    } else {
-                        showNotification(`Module ${meetingNumber} has been ${e.target.checked ? 'unlocked' : 'locked'}.`);
-                    }
-                });
-
-                 card.querySelector('.submission-toggle-checkbox').addEventListener('change', async (e) => {
-                    const { error } = await db.from('meetings').update({ assignment_enabled: e.target.checked }).eq('meeting_number', meetingNumber);
-                    if (error) {
-                        showNotification('Error: ' + error.message, 'error');
-                        e.target.checked = !e.target.checked; // Revert on failure
-                    } else {
-                        showNotification(`File submission for Module ${meetingNumber} has been ${e.target.checked ? 'enabled' : 'disabled'}.`);
-                    }
-                });
-
-                card.querySelector('.quiz-toggle-checkbox').addEventListener('change', async (e) => {
-                    const { error } = await db.from('meetings').update({ quiz_enabled: e.target.checked }).eq('meeting_number', meetingNumber);
-                    if (error) {
-                        showNotification('Error: ' + error.message, 'error');
-                        e.target.checked = !e.target.checked; // Revert on failure
-                    } else {
-                        showNotification(`Quiz for Module ${meetingNumber} has been ${e.target.checked ? 'enabled' : 'disabled'}.`);
-                    }
-                });
-                
-                card.querySelector('.manage-material-btn').addEventListener('click', () => openMaterialModal(material, meetingNumber));
-                card.querySelector('.manage-quiz-btn').addEventListener('click', () => openQuizBuilderModal(quiz, meetingNumber));
-
-                container.appendChild(card);
-            });
-            feather.replace();
-        }
-
-        async function renderLecturerAttendance(meetingNumber = 1) {
-            const tableBody = document.getElementById('attendance-table-body');
-            if(!tableBody) return;
-            tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4">Loading attendance data...</td></tr>';
-            
-            const [studentsRes, attendanceRes] = await Promise.all([
-                db.from('students').select('*').order('name'),
-                db.from('attendance').select('*').eq('meeting_number', meetingNumber)
-            ]);
-
-            const students = studentsRes.data || [];
-            const attendanceRecords = attendanceRes.data || [];
-            tableBody.innerHTML = '';
-
-            students.forEach(student => {
-                const hasAttended = attendanceRecords.some(record => record.student_id === student.id);
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 text-sm text-gray-500">${student.nrp}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">${student.name}</td>
-                    <td class="px-6 py-4 text-sm">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${hasAttended ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                            ${hasAttended ? 'Present' : 'Absent'}
-                        </span>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-        
-        async function renderLecturerSubmissions(meetingNumber = 1) {
-            const tableBody = document.getElementById('submission-table-body');
-            if (!tableBody) return;
-            tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4">Loading submissions...</td></tr>';
-
-            const { data: students } = await db.from('students').select('id, nrp, name').order('name');
-            if (!students) {
-                tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4">Could not load students.</td></tr>';
-                return;
-            }
-
-            const { data: submissions } = await db.from('submissions').select('*').eq('meeting_number', meetingNumber);
-
-            tableBody.innerHTML = '';
-
-            if (students.length === 0) {
-                 tableBody.innerHTML = '<tr><td colspan="3" class="text-center p-4">No students registered yet.</td></tr>';
-                 return;
-            }
-
-            students.forEach(student => {
-                const submission = submissions ? submissions.find(s => s.student_id === student.id) : null;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${student.nrp}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${student.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${submission ? `<a href="${submission.file_url}" target="_blank" class="text-indigo-600 hover:text-indigo-800 flex items-center"><i data-feather="download" class="w-4 h-4 mr-2"></i>${submission.file_name}</a>` : 'No submission'}
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-            feather.replace();
-        }
-
-        async function renderLecturerScores() {
-            const headContainer = document.getElementById('scores-table-head');
-            const bodyContainer = document.getElementById('scores-table-body');
-            headContainer.innerHTML = '';
-            bodyContainer.innerHTML = '<tr><td colspan="100%" class="text-center p-4">Loading scores...</td></tr>';
-
-            const [studentsRes, quizzesRes, scoresRes] = await Promise.all([
-                db.from('students').select('*').order('name'),
-                db.from('quizzes').select('*'),
-                db.from('scores').select('*')
-            ]);
-
-            const students = studentsRes.data || [];
-            const quizzes = quizzesRes.data || [];
-            const scores = scoresRes.data || [];
-
-            const regularMeetings = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15];
-            const utsMeeting = 8;
-            const uasMeeting = 16;
-            
-            const quizzesByMeeting = quizzes.reduce((acc, quiz) => {
-                acc[quiz.meeting] = quiz;
-                return acc;
-            }, {});
-
-            // 1. Build the dynamic header
-            let headerHTML = '<tr>';
-            headerHTML += '<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NRP</th>';
-            headerHTML += '<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>';
-            regularMeetings.forEach(num => {
-                const quiz = quizzesByMeeting[num];
-                headerHTML += `<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider" title="${quiz ? quiz.title : ''}">M${num}</th>`;
-            });
-            const utsQuiz = quizzesByMeeting[utsMeeting];
-            headerHTML += `<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider font-bold bg-yellow-100" title="${utsQuiz ? utsQuiz.title : ''}">UTS</th>`;
-            const uasQuiz = quizzesByMeeting[uasMeeting];
-            headerHTML += `<th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider font-bold bg-yellow-100" title="${uasQuiz ? uasQuiz.title : ''}">UAS</th>`;
-            headerHTML += '</tr>';
-            headContainer.innerHTML = headerHTML;
-
-            // 2. Build the body
-            bodyContainer.innerHTML = '';
-            if (students.length === 0) {
-                 bodyContainer.innerHTML = '<tr><td colspan="100%" class="text-center p-4">No students registered yet.</td></tr>';
-                 return;
-            }
-
-            students.forEach(student => {
-                let rowHTML = '<tr>';
-                rowHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${student.nrp}</td>`;
-                rowHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${student.name}</td>`;
-
-                const getScore = (meetingNum) => {
-                    const quiz = quizzesByMeeting[meetingNum];
-                    if (!quiz) return '-';
-                    const scoreRecord = scores.find(s => s.student_id === student.id && s.quiz_id === quiz.id);
-                    return scoreRecord ? scoreRecord.score : '-';
-                };
-                
-                regularMeetings.forEach(num => {
-                    rowHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${getScore(num)}</td>`;
-                });
-                
-                rowHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center font-bold bg-yellow-50">${getScore(utsMeeting)}</td>`;
-                rowHTML += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center font-bold bg-yellow-50">${getScore(uasMeeting)}</td>`;
-
-                rowHTML += '</tr>';
-                bodyContainer.innerHTML += rowHTML;
-            });
-        }
-        
-        async function exportScoresToExcel() {
-            showNotification('Preparing data for export...');
-            
-            const [studentsRes, quizzesRes, scoresRes] = await Promise.all([
-                db.from('students').select('*').order('name'),
-                db.from('quizzes').select('*'),
-                db.from('scores').select('*')
-            ]);
-
-            const students = studentsRes.data || [];
-            const quizzes = quizzesRes.data || [];
-            const scores = scoresRes.data || [];
-
-            const regularMeetings = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15];
-            const utsMeeting = 8;
-            const uasMeeting = 16;
-            
-            const quizzesByMeeting = quizzes.reduce((acc, quiz) => {
-                acc[quiz.meeting] = quiz;
-                return acc;
-            }, {});
-            
-            const dataForExport = students.map(student => {
-                const row = {
-                    'NRP': student.nrp,
-                    'Name': student.name
-                };
-
-                const getScore = (meetingNum) => {
-                    const quiz = quizzesByMeeting[meetingNum];
-                    if (!quiz) return '';
-                    const scoreRecord = scores.find(s => s.student_id === student.id && s.quiz_id === quiz.id);
-                    return scoreRecord ? scoreRecord.score : '';
-                };
-                
-                regularMeetings.forEach(num => {
-                    row[`M${num}`] = getScore(num);
-                });
-                row['UTS'] = getScore(utsMeeting);
-                row['UAS'] = getScore(uasMeeting);
-                
-                return row;
-            }
-            );
-            
-            const worksheet = XLSX.utils.json_to_sheet(dataForExport);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Student Scores");
-
-            XLSX.writeFile(workbook, "Student_Scores_Recap.xlsx");
-        }
-
-        async function handleChangePassword() {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            const oldPassword = document.getElementById('old-password').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmNewPassword = document.getElementById('confirm-new-password').value;
-            
-            if (!oldPassword || !newPassword || !confirmNewPassword) {
-                showNotification('Please fill all fields', 'error');
-                return;
-            }
-            if (newPassword !== confirmNewPassword) {
-                showNotification('New passwords do not match', 'error');
-                return;
-            }
-            if (user.password !== oldPassword) {
-                showNotification('Old password is not correct', 'error');
-                return;
-            }
-
-            const { error } = await db.from('students').update({ password: newPassword }).eq('id', user.id);
-            if (error) {
-                showNotification('Failed to update password: ' + error.message, 'error');
-            } else {
-                showNotification('Password updated successfully!');
-                // Update password in session storage as well
-                user.password = newPassword;
-                sessionStorage.setItem('user', JSON.stringify(user));
-                changePasswordModal.classList.add('hidden');
-                changePasswordForm.reset();
-            }
-        }
-
-        // --- Initial App Load ---
-        function checkSession() {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            if (user) {
-                if (user.role === 'student') {
-                    showLoginPage(false);
-                    showStudentDashboard(true);
-                } else if (user.role === 'lecturer') {
-                    showLoginPage(false);
-                    showLecturerDashboard(true);
-                }
-            } else {
-                showLoginPage(true);
-            }
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            populateMeetingOptions('quiz-meeting-number');
-            populateMeetingOptions('material-meeting-number');
-            
-            const attendanceSelect = document.getElementById('attendance-meeting-select');
-            if (attendanceSelect) {
-                 populateMeetingOptions('attendance-meeting-select');
-                 attendanceSelect.addEventListener('change', (e) => {
-                    renderLecturerAttendance(e.target.value);
-                });
-            }
-            
-            const submissionSelect = document.getElementById('submission-meeting-select');
-            if(submissionSelect){
-                 populateMeetingOptions('submission-meeting-select');
-                 submissionSelect.addEventListener('change', (e) => {
-                    renderLecturerSubmissions(e.target.value);
-                });
-            }
-            
-            const exportBtn = document.getElementById('export-scores-btn');
-            if(exportBtn) {
-               exportBtn.addEventListener('click', exportScoresToExcel);
-            }
-            
-            // Event Listeners for Change Password Modal
-            if(changePasswordBtn) {
-                changePasswordBtn.addEventListener('click', () => {
-                    changePasswordModal.classList.remove('hidden');
-                    changePasswordForm.reset();
-                });
-            }
-            if(cancelChangePasswordBtn) {
-                cancelChangePasswordBtn.addEventListener('click', () => {
-                    changePasswordModal.classList.add('hidden');
-                });
-            }
-            if(saveNewPasswordBtn) {
-                saveNewPasswordBtn.addEventListener('click', handleChangePassword);
-            }
-
-            // Start the clock
-            updateClock();
-            setInterval(updateClock, 1000);
-
-            checkSession();
-        });
-    </script>
 </body>
 </html>
 
