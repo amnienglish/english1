@@ -486,9 +486,15 @@
                                     <select id="quiz-meeting-number" class="mt-1 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md"></select>
                                 </div>
                             </div>
-                            <div>
-                                <label for="quiz-subtitle" class="block text-sm font-medium text-gray-700">Subtitle (Optional)</label>
-                                <input type="text" id="quiz-subtitle" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="quiz-subtitle" class="block text-sm font-medium text-gray-700">Subtitle (Optional)</label>
+                                    <input type="text" id="quiz-subtitle" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md">
+                                </div>
+                                <div>
+                                    <label for="quiz-duration" class="block text-sm font-medium text-gray-700">Durasi Kuis (menit)</label>
+                                    <input type="number" id="quiz-duration" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Kosongkan jika tidak ada batas waktu">
+                                </div>
                             </div>
                             <hr>
                             <div id="questions-container" class="space-y-6">
@@ -522,6 +528,9 @@
                 <div class="modal-backdrop"></div>
                 <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-2xl sm:w-full z-50">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div id="quiz-timer-display" class="hidden sticky top-0 bg-indigo-100 p-2 rounded-md mb-4 text-center">
+                            <span class="text-lg font-bold text-indigo-700">Sisa Waktu: <span id="quiz-timer"></span></span>
+                        </div>
                         <h3 class="text-lg leading-6 font-medium text-gray-900" id="quiz-taker-modal-title">Quiz Title</h3>
                         <p class="text-sm text-gray-500 mt-1" id="quiz-taker-modal-subtitle"></p>
                         <div id="quiz-taker-content" class="mt-4">
@@ -636,6 +645,7 @@
         let quizQuillEditors = {};
         let fullStudentData = {}; // Cache for student view data
         let currentlyViewedMeeting = null; // To track the active module
+        let quizTimerInterval = null;
 
         // --- UTILITY & PAGE VISIBILITY FUNCTIONS ---
         function showNotification(message, type = 'success') {
@@ -947,6 +957,7 @@
                 document.getElementById('quiz-id').value = quiz.id;
                 document.getElementById('quiz-title').value = quiz.title;
                 document.getElementById('quiz-subtitle').value = quiz.subtitle || '';
+                document.getElementById('quiz-duration').value = quiz.duration_minutes || '';
                 meetingSelect.value = quiz.meeting;
                 meetingSelect.disabled = true;
                 deleteQuizBtn.classList.remove('hidden');
@@ -1138,12 +1149,13 @@
             feather.replace();
         }
 
-        // --- FIXED FUNCTION ---
         async function saveQuiz() {
             const quizId = document.getElementById('quiz-id').value;
             const title = document.getElementById('quiz-title').value;
             const subtitle = document.getElementById('quiz-subtitle').value;
             const meeting = document.getElementById('quiz-meeting-number').value;
+            const durationInput = document.getElementById('quiz-duration').value;
+            const duration_minutes = durationInput ? parseInt(durationInput, 10) : null;
 
             if (!title) {
                 showNotification('Quiz title is required', 'error');
@@ -1152,8 +1164,23 @@
 
             try {
                 // 1. Upsert the quiz details first to get a valid quiz ID.
-                const { data: quizData, error: quizError } = await db.from('quizzes').upsert({ id: quizId || undefined, title, subtitle, meeting }).select().single();
-                if (quizError) throw quizError;
+                let quizDetails = { id: quizId || undefined, title, subtitle, meeting, duration_minutes };
+                let { data: quizData, error: quizError } = await db.from('quizzes').upsert(quizDetails).select().single();
+
+                // Check for the specific error if the duration column is missing
+                if (quizError && quizError.code === 'PGRST204' && quizError.message.includes('duration_minutes')) {
+                    console.warn("Column 'duration_minutes' not found. Retrying without it.");
+                    showNotification("Fitur timer belum aktif di database. Silakan tambahkan kolom 'duration_minutes' (tipe: integer) di tabel 'quizzes'. Kuis disimpan tanpa timer.", 'error');
+                    
+                    // Remove the problematic key and retry
+                    delete quizDetails.duration_minutes;
+                    const retryResult = await db.from('quizzes').upsert(quizDetails).select().single();
+                    quizData = retryResult.data;
+                    quizError = retryResult.error;
+                }
+
+                if (quizError) throw quizError; // Throw if there's still an error after retry
+
                 const currentQuizId = quizData.id;
 
                 const itemElements = Array.from(document.getElementById('questions-container').children);
@@ -1299,6 +1326,8 @@
         // --- QUIZ TAKER (STUDENT) ---
         
         async function openQuizTakerModal(quizId) {
+            if (quizTimerInterval) clearInterval(quizTimerInterval);
+
             const quizTakerModal = document.getElementById('quiz-taker-modal');
             const { data: quiz } = await db.from('quizzes').select('*').eq('id', quizId).single();
             if (!quiz) return;
@@ -1308,11 +1337,41 @@
             const contentDiv = document.getElementById('quiz-taker-content');
             contentDiv.innerHTML = '<p>Loading questions...</p>';
             quizTakerModal.classList.remove('hidden');
+            const timerDisplay = document.getElementById('quiz-timer-display');
+            const timerEl = document.getElementById('quiz-timer');
 
             const { data: items } = await db.from('questions').select('*').eq('quiz_id', quizId).order('display_order');
+            
+            if (quiz.duration_minutes && quiz.duration_minutes > 0) {
+                timerDisplay.classList.remove('hidden');
+                const endTime = new Date().getTime() + quiz.duration_minutes * 60 * 1000;
+
+                quizTimerInterval = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = endTime - now;
+                    
+                    if (distance < 0) {
+                        clearInterval(quizTimerInterval);
+                        timerEl.innerHTML = "Waktu Habis";
+                        showNotification('Waktu habis! Kuis akan diserahkan secara otomatis.', 'error');
+                        const questionsToSubmit = items ? items.filter(i => i.question_type !== 'instructional_text' && i.question_type !== 'reading_passage') : [];
+                        submitQuiz(quiz.id, questionsToSubmit);
+                        return;
+                    }
+
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    timerEl.innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                }, 1000);
+            } else {
+                timerDisplay.classList.add('hidden');
+            }
+            
             if (!items || items.length === 0) {
                 contentDiv.innerHTML = '<p>This quiz has no questions yet.</p>';
                 document.getElementById('submit-quiz-answers').classList.add('hidden');
+                if (quizTimerInterval) clearInterval(quizTimerInterval);
                 return;
             }
             
@@ -1352,13 +1411,17 @@
             const submitQuizAnswersBtn = document.getElementById('submit-quiz-answers');
             if (questions.length > 0) {
                  submitQuizAnswersBtn.classList.remove('hidden');
-                 submitQuizAnswersBtn.onclick = () => submitQuiz(quiz.id, questions);
+                 const newSubmitBtn = submitQuizAnswersBtn.cloneNode(true);
+                 submitQuizAnswersBtn.parentNode.replaceChild(newSubmitBtn, submitQuizAnswersBtn);
+                 newSubmitBtn.addEventListener('click', () => submitQuiz(quiz.id, questions));
             } else {
                 submitQuizAnswersBtn.classList.add('hidden');
             }
         }
 
         async function submitQuiz(quizId, questions) {
+            if (quizTimerInterval) clearInterval(quizTimerInterval);
+
             const { data: { user }, error: userError } = await db.auth.getUser();
             if (userError || !user) {
                 showNotification('Session expired. Please log in again.', 'error');
@@ -1366,10 +1429,11 @@
             }
             
             const form = document.getElementById('quiz-taker-form');
-            if (!form.reportValidity()) {
-                 showNotification('Please answer all questions', 'error');
-                 return;
-            }
+            if (!form) return;
+            // if (!form.reportValidity()) {
+            //      showNotification('Please answer all questions', 'error');
+            //      return;
+            // }
             const formData = new FormData(form);
             let correctAnswers = 0;
             
@@ -1626,10 +1690,17 @@
                          const buttonOrScoreHTML = score
                             ? `<div class="text-right"><p class="font-bold text-2xl text-indigo-600">${score.score}</p><p class="text-sm text-gray-500">Your Score</p></div>`
                             : `<button data-quiz-id="${quiz.id}" class="take-quiz-btn bg-green-600 text-white px-5 py-2 rounded-md hover:bg-green-700 font-semibold">Take Quiz</button>`;
+                        
+                        let durationInfo = '';
+                        if(quiz.duration_minutes){
+                            durationInfo = `<p class="text-sm text-gray-600 ml-10 mt-1 flex items-center"><i data-feather="clock" class="w-4 h-4 mr-1"></i> Durasi: ${quiz.duration_minutes} menit</p>`
+                        }
+
                         moduleHTML += `<div class="bg-gray-50 rounded-lg p-6 flex justify-between items-center">
                             <div>
                                 <div class="flex items-center"><i data-feather="edit-3" class="text-green-600 mr-4"></i><h4 class="text-xl font-semibold text-gray-800">${quiz.title}</h4></div>
                                 ${quiz.subtitle ? `<p class="text-sm text-gray-600 ml-10 mt-1">${quiz.subtitle}</p>` : ''}
+                                ${durationInfo}
                             </div>
                             ${buttonOrScoreHTML}
                         </div>`;
@@ -2393,7 +2464,10 @@
                 document.getElementById('confirmation-modal').classList.add('hidden');
             });
 
-            document.getElementById('close-quiz-taker').addEventListener('click', () => document.getElementById('quiz-taker-modal').classList.add('hidden'));
+            document.getElementById('close-quiz-taker').addEventListener('click', () => {
+                if (quizTimerInterval) clearInterval(quizTimerInterval);
+                document.getElementById('quiz-taker-modal').classList.add('hidden');
+            });
 
             document.getElementById('confirm-action-btn').addEventListener('click', () => {
                 if (typeof confirmActionCallback === 'function') {
@@ -2481,3 +2555,4 @@
     </script>
 </body>
 </html>
+
