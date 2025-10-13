@@ -1184,22 +1184,18 @@
                 let quizDetails = { id: quizId || undefined, title, subtitle, meeting, duration_minutes };
                 let { data: quizData, error: quizError } = await db.from('quizzes').upsert(quizDetails).select().single();
 
-                // Check for the specific error if the duration column is missing
-                if (quizError && quizError.code === 'PGRST204' && quizError.message.includes('duration_minutes')) {
+                if (quizError && quizError.message.includes('duration_minutes')) {
                     console.warn("Column 'duration_minutes' not found. Retrying without it.");
-                    showNotification("Fitur timer belum aktif di database. Silakan tambahkan kolom 'duration_minutes' (tipe: integer) di tabel 'quizzes'. Kuis disimpan tanpa timer.", 'error');
-                    
-                    // Remove the problematic key and retry
+                    showNotification("Fitur timer belum aktif di database. Kuis disimpan tanpa timer.", 'error');
                     delete quizDetails.duration_minutes;
                     const retryResult = await db.from('quizzes').upsert(quizDetails).select().single();
                     quizData = retryResult.data;
                     quizError = retryResult.error;
                 }
 
-                if (quizError) throw quizError; // Throw if there's still an error after retry
+                if (quizError) throw quizError;
 
                 const currentQuizId = quizData.id;
-
                 const itemElements = Array.from(document.getElementById('questions-container').children);
                 let validationError = false;
 
@@ -1207,11 +1203,12 @@
                 const preUploadPayloads = await Promise.all(itemElements.map(async (el, index) => {
                     if (validationError) return null;
 
-                    const id = el.querySelector('.item-id')?.value || null;
+                    const idValue = el.querySelector('.item-id')?.value;
+                    const parsedId = idValue ? parseInt(idValue, 10) : NaN;
                     const type = el.dataset.type;
                     
                     let payload = {
-                        id: id ? parseInt(id, 10) : undefined,
+                        id: !isNaN(parsedId) ? parsedId : undefined,
                         quiz_id: currentQuizId,
                         display_order: index,
                         question_text: '',
@@ -1263,7 +1260,6 @@
                             }
                         }
                         
-                        // Handle image upload
                         const fileToUpload = el.querySelector('.question-image-input')?.files[0];
                         const existingImageUrl = el.querySelector('.current-image-url')?.value;
                         
@@ -1283,21 +1279,21 @@
                 if (validationError) return;
 
                 const finalPayloads = preUploadPayloads.filter(p => p !== null);
-
+                
                 // 3. Separate payloads for items that need to be inserted vs. updated.
                 const itemsToInsert = finalPayloads.filter(p => p.id === undefined).map(({ id, ...rest }) => rest);
                 const itemsToUpdate = finalPayloads.filter(p => p.id !== undefined);
 
-                // 4. Perform inserts and updates. Use .select('id') to get the IDs back.
-                const insertPromise = itemsToInsert.length > 0 ? db.from('questions').insert(itemsToInsert).select('id') : Promise.resolve({ data: [] });
-                const updatePromise = itemsToUpdate.length > 0 ? db.from('questions').upsert(itemsToUpdate).select('id') : Promise.resolve({ data: [] });
-                
+                // 4. Perform inserts and updates.
+                const insertPromise = itemsToInsert.length > 0 ? db.from('questions').insert(itemsToInsert).select('id') : Promise.resolve({ data: [], error: null });
+                const updatePromise = itemsToUpdate.length > 0 ? db.from('questions').upsert(itemsToUpdate).select('id') : Promise.resolve({ data: [], error: null });
+
                 const [insertResult, updateResult] = await Promise.all([insertPromise, updatePromise]);
 
                 if (insertResult.error) throw insertResult.error;
                 if (updateResult.error) throw updateResult.error;
 
-                // 5. Build a complete list of all item IDs that should be in the database.
+                // 5. Build a list of all item IDs that should be in the database.
                 const insertedIds = insertResult.data ? insertResult.data.map(d => d.id) : [];
                 const updatedIds = updateResult.data ? updateResult.data.map(d => d.id) : [];
                 const finalIds = [...insertedIds, ...updatedIds];
@@ -1325,7 +1321,6 @@
                 showNotification('Error saving quiz: ' + (error.message || 'Unknown error'), 'error');
             }
         }
-
 
         async function deleteQuiz(quizId) {
             if (confirm('Are you sure you want to delete this quiz and all its questions? This action cannot be undone.')) {
