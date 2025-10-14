@@ -1826,12 +1826,40 @@
                 file_url: urlData.publicUrl
             };
             
-            const { error } = await db.from('submissions').upsert(submissionData, {
-                onConflict: 'student_id, meeting_number'
-            });
+            // Check if a submission for this student and meeting already exists.
+            const { data: existingSubmission, error: fetchError } = await db
+                .from('submissions')
+                .select('id')
+                .eq('student_id', user.id)
+                .eq('meeting_number', meetingNumber)
+                .single();
+
+            // If there's an error and it's not the "no rows found" error, show it.
+            if (fetchError && fetchError.code !== 'PGRST116') {
+                showNotification('Error checking submission: ' + fetchError.message, 'error');
+                return;
+            }
+
+            let finalError;
+
+            if (existingSubmission) {
+                // If it exists, update it.
+                const { error: updateError } = await db.from('submissions')
+                    .update({
+                        file_name: file.name,
+                        file_url: urlData.publicUrl,
+                        created_at: new Date().toISOString() // Also update the timestamp
+                    })
+                    .eq('id', existingSubmission.id);
+                finalError = updateError;
+            } else {
+                // If it doesn't exist, insert a new one.
+                const { error: insertError } = await db.from('submissions').insert(submissionData);
+                finalError = insertError;
+            }
             
-            if (error) {
-                showNotification('Failed to save submission record: ' + error.message, 'error');
+            if (finalError) {
+                showNotification('Failed to save submission record: ' + finalError.message, 'error');
             } else {
                 showNotification('Assignment submitted successfully!');
                 await renderStudentUnifiedView();
