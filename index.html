@@ -1387,10 +1387,12 @@
                         }
                         
                         payload.question_text = mediaUrl;
-                        if (!payload.question_text) {
-                            showNotification(`Please upload a media file or provide YouTube URL at index ${index}.`, 'error');
-                            validationError = true;
-                        }
+
+// Cek ini HANYA jika tidak ada error upload sebelumnya DAN mediaUrl masih kosong
+if (!validationError && !payload.question_text) { 
+    showNotification(`Please upload a media file or provide YouTube URL at index ${index}.`, 'error');
+    validationError = true;
+}
                     } else if (type === 'question') {
                         payload.question_text = el.querySelector('.question-text')?.value;
                         payload.question_type = el.querySelector('.question-type-selector:checked').value;
