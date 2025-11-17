@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Mencocokkan Kata & Gambar</title>
+    <!-- Memuat Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- BARU: Memuat Supabase Client Library -->
+    <!-- Pastikan versi ini (@2) sesuai dengan yang Anda gunakan di LMS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* ... (CSS yang ada tetap sama) ... */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            perspective: 1000px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.5rem; /* rounded-lg */
+        }
+        .card-front {
+            background-color: #3b82f6; /* bg-blue-500 */
+            color: white;
+            font-size: 3rem; /* text-5xl */
+            z-index: 2;
+        }
+        .card-back {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #1f2937; /* text-gray-800 */
+            transform: rotateY(180deg);
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            z-index: 1;
+        }
+        .card.is-matched .card-inner {
+            transform: rotateY(180deg); /* Tetap terbuka */
+        }
+        .card.is-matched .card-back {
+             border: 3px solid #10b981; /* border-emerald-500 */
+        }
+    </style>
+    <!-- Memuat font Inter dari Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <main class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-2xl relative">
+        
+        <button id="open-login-button" class="absolute top-4 right-6 text-sm text-blue-500 hover:underline z-10">
+            Login Dosen
+        </button>
+
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
+            Mencocokkan Kata & Gambar
+        </h1>
+
+        <!-- ... (Setup Section tetap sama) ... -->
+        <div id="setup-section" class="hidden">
+            <label for="data-input" class="block text-md font-semibold text-gray-700 mb-2">
+                Masukkan Pasangan (Emoji,Kata)
+            </label>
+            <p class="text-sm text-gray-500 mb-3">
+                Format: Satu pasangan per baris, dipisah koma. Contoh: 🍎,Apel
+            </p>
+            <textarea id="data-input" rows="8"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            ></textarea>
+            <p id="error-message" class="text-red-500 text-sm mt-2 mb-4 hidden"></p>
+            <button id="start-game-button"
+                class="w-full px-6 py-3 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-400">
+                Mulai Game
+            </button>
+        </div>
+
+
+        <!-- ... (Game Section tetap sama) ... -->
+        <div id="game-section">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg">
+                    <span class="font-semibold">Jumlah Tebakan:</span>
+                    <span id="guess-count" class="font-bold text-blue-600">0</span>
+                </div>
+                <div>
+                    <button id="logout-button" class="hidden px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 mr-2">
+                        Logout
+                    </button>
+                    <button id="reset-button" class
+                        ="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+                        Reset Game
+                    </button>
+                </div>
+            </div>
+            <div id="game-board" class="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4">
+                <!-- Kartu akan dibuat oleh JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- ... (Win Modal tetap sama, tapi kita akan update teksnya) ... -->
+    <div id="win-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl text-center">
+            <h2 class="text-3xl font-bold text-green-500 mb-4">Selamat! 🎉</h2>
+            <p id="win-message" class="text-lg text-gray-700 mb-6">Anda menyelesaikan game!</p>
+            <!-- BARU: Status penyimpanan skor -->
+            <p id="score-status" class="text-md text-gray-500 mb-6"></p>
+            <button id="play-again-button" class="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-400">
+                Main Lagi
+            </button>
+        </div>
+    </div>
+
+    <!-- ... (Login Modal tetap sama) ... -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl text-center w-full max-w-sm">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Login Dosen</h2>
+            <label for="username" class="block text-md font-semibold text-gray-700 mb-2 text-left">Username</label>
+            <input type="text" id="username" placeholder="Username" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none mb-3">
+            <label for="password" class="block text-md font-semibold text-gray-700 mb-2 text-left">Password</label>
+            <input type="password" id="password" placeholder="Password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none mb-4">
+            <button id="login-button" class="w-full px-6 py-3 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400">
+                Login
+            </button>
+            <button id="cancel-login-button" class="w-full mt-3 px-6 py-3 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400">
+                Batal
+            </button>
+            <p id="login-error-message" class="text-red-500 text-sm mt-4 text-center hidden"></p>
+        </div>
+    </div>
+
+
+    <script>
+        // ========================================================================
+        // BARU: KONFIGURASI SUPABASE
+        // ========================================================================
+        // PENTING: Ganti dengan URL dan Anon Key Supabase Anda
+        const SUPABASE_URL = 'https://fxuvhqdfwtefyobfkeuy.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4dXZocWRmd3RlZnlvYmZrZXV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0MTc4OTcsImV4cCI6MjA3Mzk5Mzg5N30.YKXDn0xMaL3ZFt5qGKTFJvxY1pY_4bs8RbMPXil0juo';
+        
+        let supabase;
+        try {
+             if (window.supabase) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            } else {
+                console.error("Supabase client not loaded.");
+            }
+        } catch (e) {
+            console.error("Error initializing Supabase client:", e);
+        }
+        // ========================================================================
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameBoard = document.getElementById('game-board');
+            const guessCountEl = document.getElementById('guess-count');
+            const resetButton = document.getElementById('reset-button');
+            const winModal = document.getElementById('win-modal');
+            const winMessage = document.getElementById('win-message');
+            const playAgainButton = document.getElementById('play-again-button');
+            const scoreStatusEl = document.getElementById('score-status'); // BARU
+            
+            const setupSection = document.getElementById('setup-section');
+            const gameSection = document.getElementById('game-section');
+            const dataInput = document.getElementById('data-input');
+            const startGameButton = document.getElementById('start-game-button');
+            const errorMessage = document.getElementById('error-message');
+
+            const loginModal = document.getElementById('login-modal');
+            const openLoginButton = document.getElementById('open-login-button');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginButton = document.getElementById('login-button');
+            const cancelLoginButton = document.getElementById('cancel-login-button');
+            const logoutButton = document.getElementById('logout-button');
+            const loginErrorMessage = document.getElementById('login-error-message');
+            
+            const defaultData = `🍎,Apel
+🍌,Pisang
+🍇,Anggur
+🚗,Mobil
+🏠,Rumah
+🐶,Anjing
+`;
+            const LECTURER_USER = 'guru123';
+            const LECTURER_PASS = 'guru123';
+            let flippedCards = [];
+            let matchedPairs = 0;
+            let guessCount = 0;
+            let lockBoard = false;
+            let totalPairs = 0;
+            let isLoggedIn = false;
+            let activeGameData = defaultData;
+
+            dataInput.value = defaultData.trim();
+
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function parseData(text) {
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+                const cardData = [];
+                let id = 1;
+
+                for (const line of lines) {
+                    const parts = line.split(',').map(p => p.trim());
+                    if (parts.length === 2 && parts[0] && parts[1]) {
+                        cardData.push({ type: 'emoji', content: parts[0], id: id });
+                        cardData.push({ type: 'word', content: parts[1], id: id });
+                        id++;
+                    }
+                }
+                return cardData;
+            }
+
+            function startGame() {
+                const rawData = dataInput.value;
+                const cardData = parseData(rawData);
+
+                if (cardData.length === 0 || cardData.length % 2 !== 0) {
+                    errorMessage.textContent = 'Data tidak valid. Pastikan formatnya benar (Emoji,Kata) dan ada setidaknya satu pasangan.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+
+                errorMessage.classList.add('hidden');
+                activeGameData = rawData;
+                totalPairs = cardData.length / 2;
+                
+                setupSection.classList.add('hidden');
+                gameSection.classList.remove('hidden');
+                logoutButton.classList.remove('hidden');
+                openLoginButton.classList.add('hidden');
+
+                createBoard(cardData);
+            }
+
+            function handleReset() {
+                winModal.classList.add('hidden');
+                gameBoard.innerHTML = '';
+                scoreStatusEl.textContent = ''; // BARU
+
+                if (isLoggedIn) {
+                    gameSection.classList.add('hidden');
+                    logoutButton.classList.add('hidden');
+                    setupSection.classList.remove('hidden');
+                    openLoginButton.classList.remove('hidden');
+                } else {
+                    const cardData = parseData(activeGameData);
+                    totalPairs = cardData.length / 2;
+                    createBoard(cardData);
+                }
+            }
+
+            function handleLogin() {
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+
+                if (username === LECTURER_USER && password === LECTURER_PASS) {
+                    isLoggedIn = true;
+                    loginModal.classList.add('hidden');
+                    gameSection.classList.add('hidden');
+                    setupSection.classList.remove('hidden');
+                    loginErrorMessage.classList.add('hidden');
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                    openLoginButton.classList.add('hidden');
+                    gameBoard.innerHTML = '';
+                } else {
+                    isLoggedIn = false;
+                    loginErrorMessage.textContent = 'Username atau Password salah.';
+                    loginErrorMessage.classList.remove('hidden');
+                }
+            }
+            
+            function createBoard(cardData) {
+                gameBoard.innerHTML = '';
+                matchedPairs = 0;
+                guessCount = 0;
+                flippedCards = [];
+                lockBoard = false;
+                updateGuessCount();
+                winModal.classList.add('hidden');
+
+                const gameCards = shuffle([...cardData]);
+
+                gameCards.forEach(cardData => {
+                    const card = document.createElement('div');
+                    card.className = 'card h-24 sm:h-32 cursor-pointer';
+                    card.dataset.id = cardData.id;
+
+                    const cardInner = document.createElement('div');
+                    cardInner.className = 'card-inner';
+                    const cardFront = document.createElement('div');
+                    cardFront.className = 'card-front';
+                    cardFront.textContent = '?';
+                    const cardBack = document.createElement('div');
+                    cardBack.className = 'card-back';
+                    
+                    if (cardData.type === 'emoji') {
+                        cardBack.textContent = cardData.content;
+                        cardBack.classList.add('text-4xl', 'sm:text-5xl');
+                    } else {
+                        cardBack.textContent = cardData.content;
+                        cardBack.classList.add('text-lg', 'sm:text-xl', 'font-semibold', 'p-2');
+                    }
+
+                    cardInner.appendChild(cardFront);
+                    cardInner.appendChild(cardBack);
+                    card.appendChild(cardInner);
+
+                    card.addEventListener('click', () => flipCard(card));
+                    gameBoard.appendChild(card);
+                });
+            }
+
+            function flipCard(card) {
+                if (lockBoard) return;
+                if (card === flippedCards[0]) return;
+                if (card.classList.contains('is-matched')) return;
+
+                card.classList.add('is-flipped');
+                flippedCards.push(card);
+
+                if (flippedCards.length === 2) {
+                    lockBoard = true;
+                    guessCount++;
+                    updateGuessCount();
+                    checkForMatch();
+                }
+            }
+
+            function checkForMatch() {
+                const [cardOne, cardTwo] = flippedCards;
+                const idOne = cardOne.dataset.id;
+                const idTwo = cardTwo.dataset.id;
+
+                if (idOne === idTwo) {
+                    disableCards();
+                } else {
+                    unflipCards();
+                }
+            }
+
+            function disableCards() {
+                flippedCards.forEach(card => card.classList.add('is-matched'));
+                matchedPairs++;
+                resetTurn();
+                checkWin();
+            }
+
+            function unflipCards() {
+                setTimeout(() => {
+                    flippedCards.forEach(card => card.classList.remove('is-flipped'));
+                    resetTurn();
+                }, 1200);
+            }
+
+            function resetTurn() {
+                flippedCards = [];
+                lockBoard = false;
+            }
+
+            function updateGuessCount() {
+                guessCountEl.textContent = guessCount;
+            }
+            
+            // ========================================================================
+            // BARU: FUNGSI UNTUK MENGIRIM SKOR KE SUPABASE
+            // ========================================================================
+            async function kirimSkorKeSupabase(skor) {
+                if (!supabase || isLoggedIn) {
+                    // Jangan kirim skor jika dosen yang sedang login/edit
+                    return;
+                }
+
+                scoreStatusEl.textContent = 'Menyimpan skor...';
+
+                try {
+                    // 1. Dapatkan sesi mahasiswa yang sedang login
+                    // Supabase client otomatis mengelola ini di localStorage
+                    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+                    if (sessionError) throw sessionError;
+
+                    if (!session || !session.user) {
+                        throw new Error('Tidak ada sesi mahasiswa yang ditemukan. Harap login di LMS terlebih dahulu.');
+                    }
+
+                    const userId = session.user.id;
+
+                    // 2. Siapkan data untuk dikirim
+                    const skorData = {
+                        user_id: userId, // ID dari Supabase Auth
+                        game_name: 'word-match-v1', // Nama game
+                        score: skor, // Jumlah tebakan (lebih kecil lebih baik)
+                        details: `Selesai dalam ${skor} tebakan.`
+                    };
+
+                    // 3. Kirim data ke tabel 'skor_game'
+                    // PASTIKAN ANDA SUDAH MEMBUAT TABEL INI
+                    const { error } = await supabase.from('skor_game').insert(skorData);
+
+                    if (error) throw error;
+
+                    // Sukses
+                    scoreStatusEl.textContent = 'Skor Anda berhasil disimpan!';
+                    scoreStatusEl.classList.remove('text-red-500');
+                    scoreStatusEl.classList.add('text-green-500');
+
+                } catch (error) {
+                    console.error('Error saving score to Supabase:', error);
+                    scoreStatusEl.textContent = `Gagal menyimpan skor: ${error.message}`;
+                    scoreStatusEl.classList.remove('text-green-500');
+                    scoreStatusEl.classList.add('text-red-500');
+                }
+            }
+
+
+            // Cek apakah pemain sudah menang
+            function checkWin() {
+                if (matchedPairs === totalPairs) {
+                    setTimeout(() => {
+                        winMessage.textContent = `Anda menyelesaikan game dalam ${guessCount} tebakan!`;
+                        winModal.classList.remove('hidden');
+                        
+                        // =======================================================
+                        // BARU: PANGGIL FUNGSI KIRIM SKOR
+                        // =======================================================
+                        kirimSkorKeSupabase(guessCount);
+                        // =======================================================
+
+                    }, 500);
+                }
+            }
+            
+            // ... (Event listener login, logout, dsb. tetap sama) ...
+            startGameButton.addEventListener('click', startGame);
+            resetButton.addEventListener('click', handleReset);
+            playAgainButton.addEventListener('click', handleReset);
+            openLoginButton.addEventListener('click', () => {
+                loginModal.classList.remove('hidden');
+                loginErrorMessage.classList.add('hidden');
+            });
+            cancelLoginButton.addEventListener('click', () => {
+                loginModal.classList.add('hidden');
+                loginErrorMessage.classList.add('hidden');
+                usernameInput.value = '';
+                passwordInput.value = '';
+            });
+            loginButton.addEventListener('click', handleLogin);
+            logoutButton.addEventListener('click', () => {
+                isLoggedIn = false;
+                setupSection.classList.add('hidden');
+                gameSection.classList.remove('hidden');
+                logoutButton.classList.add('hidden');
+                openLoginButton.classList.remove('hidden');
+                initGame();
+            });
+
+
+            // LANGSUNG MULAI GAME SAAT LOAD
+            function initGame() {
+                isLoggedIn = false;
+                activeGameData = defaultData;
+                const cardData = parseData(activeGameData);
+                totalPairs = cardData.length / 2;
+                gameSection.classList.remove('hidden');
+                setupSection.classList.add('hidden');
+                createBoard(cardData);
+            }
+            
+            initGame(); // Panggil fungsi init
+        });
+    </script>
+</body>
+</html>
